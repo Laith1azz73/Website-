@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kalimix — Online Chat in 5 Languages | دردشة أونلاين</title>
+<meta name="description" content="Kalimix is a free online chat room. Join as a guest or create an account and talk in English, العربية, 中文, हिन्दी or Español. كاليميكس: محادثة أونلاين مجانية بخمس لغات.">
+<meta property="og:title" content="Kalimix — Online Chat">
+<meta property="og:description" content="Talk with people instantly. Free, simple, and available in 5 languages.">
+<meta property="og:type" content="website">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Kalimix","description":"Free online chat in 5 languages","inLanguage":["en","ar","zh","hi","es"]}</script>
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#2a1a5e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<style>
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font-family:system-ui,Tahoma,Arial,sans-serif;color:#1d2433;background:#f5f6fa}
+button,select{font-family:inherit;cursor:pointer;border:0}
+.hidden{display:none!important}
+#auth{min-height:100%;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle at 15% 20%,#7c5cff 0,transparent 45%),radial-gradient(circle at 85% 80%,#00c6ff 0,transparent 45%),linear-gradient(135deg,#1b1f4b,#2a1a5e)}
+.card{width:100%;max-width:380px;background:rgba(255,255,255,.95);border-radius:20px;padding:26px 22px;box-shadow:0 20px 50px rgba(0,0,0,.35);text-align:center}
+.card h1{margin:8px 0 6px;font-size:24px}
+.card p{margin:0 0 20px;color:#6b7390;font-size:14px}
+.lgs{padding:8px 10px;border-radius:10px;background:#eef0f7;font-size:14px}
+.big{width:100%;padding:14px;border-radius:12px;font-size:16px;margin-top:10px}
+.primary{background:#2f6df6;color:#fff}
+.ghost{background:#eef0f7;color:#1d2433}
+.soc{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:12px;border-radius:12px;background:#fff;border:1px solid #dde1ea;font-size:15px;margin-top:10px}
+.soc.fb{background:#1877f2;color:#fff;border-color:#1877f2}
+input.f{width:100%;padding:12px;border-radius:12px;border:1px solid #dde1ea;font-size:16px;margin-top:10px;outline:none}
+.sep{margin:14px 0 4px;color:#9aa1b8;font-size:13px}
+.back{background:none;color:#2f6df6;margin-top:14px;font-size:14px}
+#note{color:#c0392b;font-size:13px;min-height:18px;margin-top:8px}
+.tabs{display:flex;background:#eef0f7;border-radius:12px;padding:4px;margin-bottom:6px}
+.tabs button{flex:1;padding:10px;border-radius:9px;background:none;font-size:15px;color:#6b7390}
+.tabs button.on{background:#fff;color:#1d2433;font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+#land{min-height:100%;padding:30px 20px 40px;color:#fff;text-align:center;background:radial-gradient(circle at 15% 15%,#7c5cff 0,transparent 45%),radial-gradient(circle at 85% 85%,#00c6ff 0,transparent 45%),linear-gradient(135deg,#1b1f4b,#2a1a5e)}
+#land .top{display:flex;justify-content:flex-end;max-width:720px;margin:0 auto}
+.logo{font-size:44px;font-weight:800;letter-spacing:1px;margin:34px 0 8px;background:linear-gradient(90deg,#fff,#9ff3ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tag{font-size:24px;font-weight:700;margin:0 auto 10px;max-width:520px;line-height:1.4}
+.sub{font-size:16px;opacity:.85;margin:0 auto 26px;max-width:480px;line-height:1.6}
+.cta{padding:15px 38px;border-radius:30px;font-size:18px;font-weight:700;background:#fff;color:#2a1a5e;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.feats{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;max-width:760px;margin:40px auto 0}
+.feat{flex:1 1 200px;max-width:240px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:18px;padding:20px 16px}
+.feat .ic{font-size:30px}
+.feat h3{margin:8px 0 6px;font-size:17px}
+.feat p{margin:0;font-size:14px;opacity:.85;line-height:1.5}
+.foot{margin-top:40px;font-size:13px;opacity:.6}
+#app{height:100%;display:flex;flex-direction:column}
+header{direction:ltr;padding:12px 16px;background:#fff;border-bottom:1px solid #dde1ea;font-weight:700;font-size:17px;display:flex;justify-content:space-between;align-items:center;position:relative}
+#bg{background:none;font-size:26px;line-height:1;padding:2px 8px;color:#1d2433;position:relative}
+.badge{position:absolute;top:-2px;right:0;background:#e53935;color:#fff;font-size:11px;border-radius:10px;padding:1px 5px}
+#dd{position:absolute;top:54px;right:10px;width:250px;background:#fff;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.2);z-index:5;overflow:hidden;font-weight:400}
+#dd button{display:flex;align-items:center;gap:10px;width:100%;padding:13px 14px;background:#fff;font-size:15px;color:#1d2433;text-align:start;border-bottom:1px solid #eef0f7}
+#dd button:hover{background:#f5f6fa}
+.av{width:42px;height:42px;border-radius:50%;background:#2f6df6 center/cover;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;flex:none}
+.sm{font-size:12px;color:#7a8296}
+#msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px}
+.mw{display:flex;gap:8px;align-items:flex-end;max-width:88%;align-self:flex-start}
+.mw.me{align-self:flex-end;flex-direction:row-reverse}
+.av.sx{width:30px;height:30px;font-size:13px}
+.m{padding:8px 12px;border-radius:14px;background:#e9ecf4;word-break:break-word;min-width:60px;cursor:pointer}
+.m.me{background:var(--mc,#2f6df6);color:#fff}
+.q{font-size:12px;opacity:.8;border-inline-start:3px solid currentColor;padding:2px 8px;margin-bottom:4px}
+.mi{display:block;max-width:100%;border-radius:10px;margin-top:4px}
+.tm{font-size:10px;opacity:.6;margin-top:3px;text-align:end}
+#rb{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;background:#eef0f7;font-size:13px}
+#rb button{background:none;color:inherit;font-size:16px}
+#ep{display:flex;flex-wrap:wrap;gap:4px;padding:8px;background:#fff;border-top:1px solid #dde1ea}
+#ep button{font-size:22px;background:none;padding:4px}
+.ib{background:none;font-size:22px;padding:0 4px;color:inherit}
+.sw{width:26px;height:26px;border-radius:50%;margin:0 3px;border:2px solid transparent}
+.sw.on{border-color:#888}
+#ap{display:flex;gap:8px;flex-wrap:wrap;padding:8px 10px;background:#fff;border-top:1px solid #dde1ea}
+#ap button{padding:8px 14px;border-radius:18px;background:#eef0f7;color:inherit;font-size:14px}
+#rc{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#fdecea;color:#b71c1c;font-size:14px}
+#rc button{background:none;font-size:18px;color:inherit;margin-inline-start:10px}
+.mi{cursor:default}
+.sk{font-size:54px;line-height:1.1;text-align:center}
+audio{max-width:210px;height:34px;display:block;margin-top:4px}
+.foot button{background:none;color:#fff;opacity:.8;text-decoration:underline;margin:0 8px;font-size:13px}
+body.dark #ap,body.dark #md textarea{background:#1b2030;color:#e8ebf3;border-color:#2b3248}
+body.dark #ap button{background:#262d42}
+body.dark #rc{background:#3a1d1d;color:#ff8a80}
+#pin{padding:6px 14px;background:#fff8e1;color:#5d4037;font-size:13px;border-bottom:1px solid #f0e0b0}
+#an{display:flex;justify-content:space-between;align-items:center;background:#e3f2fd;color:#0d47a1;padding:8px 14px;font-size:14px}
+#an button{background:none;color:inherit;font-size:16px}
+.rx{font-size:12px;margin-top:4px}
+.dng{background:#fdecea!important;color:#b71c1c!important}
+.mini{padding:6px 10px;border-radius:10px;background:#eef0f7;color:inherit;font-size:12px;margin:6px 4px 0 0}
+.chatrow{display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;background:#f5f6fa;margin-bottom:8px;cursor:pointer}
+body.dark #pin{background:#3a3220;color:#f5e6b3;border-color:#4a4028}
+body.dark #an{background:#1c2b45;color:#9ec5ff}
+body.dark .mini,body.dark .chatrow{background:#262d42;color:#e8ebf3}
+body.dark{background:#12151c;color:#e8ebf3}
+body.dark header,body.dark #f,body.dark #dd,body.dark #dd button,body.dark #md,body.dark #ep{background:#1b2030;color:#e8ebf3;border-color:#2b3248}
+body.dark #dd button:hover{background:#262d42}
+body.dark #bg{color:#e8ebf3}
+body.dark .m{background:#262d42;color:#e8ebf3}
+body.dark .m.me{background:var(--mc,#2f6df6);color:#fff}
+body.dark #f input,body.dark #md input.f{background:#12151c;color:#e8ebf3;border-color:#2b3248}
+body.dark #rb,body.dark .nt,body.dark .lgs,body.dark #md .big.ghost{background:#262d42;color:#e8ebf3}
+body.dark .nt.u{background:#2d3a63}
+body.dark .sm{color:#9aa3b8}
+.n{font-size:12px;opacity:.7;margin-bottom:2px}
+#f{display:flex;gap:8px;padding:10px;background:#fff;border-top:1px solid #dde1ea}
+#f input{flex:1;padding:12px;border-radius:22px;border:1px solid #dde1ea;font-size:16px;outline:none}
+#f .sd{padding:0 20px;border-radius:22px;background:var(--mc,#2f6df6);color:#fff;font-size:16px}
+#ov{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px;z-index:9}
+#md{background:#fff;border-radius:18px;width:100%;max-width:380px;max-height:85%;overflow-y:auto;padding:20px}
+#md h2{margin:0 0 14px;font-size:19px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:12px 0}
+.nt{padding:10px;border-radius:10px;background:#f5f6fa;margin-bottom:8px;font-size:14px}
+.nt.u{background:#e3ecff}
+</style>
+</head>
+<body>
+
+<section id="land" class="hidden">
+ <div class="top"><select id="lg2" class="lgs"></select></div>
+ <div class="logo">Kalimix</div>
+ <h1 class="tag" data-i="tag">Talk with anyone, instantly.</h1>
+ <p class="sub" data-i="sub">A free online chat room where you can join as a guest or create an account, in your own language.</p>
+ <button class="cta" id="cta" data-i="cta">Get started</button>
+ <div class="feats">
+  <div class="feat"><div class="ic">⚡</div><h3 data-i="f1t">Instant messages</h3><p data-i="f1d">Messages appear for everyone the moment you send them.</p></div>
+  <div class="feat"><div class="ic">🌍</div><h3 data-i="f2t">5 languages</h3><p data-i="f2d">English, العربية, 中文, हिन्दी and Español.</p></div>
+  <div class="feat"><div class="ic">🔒</div><h3 data-i="f3t">Safe accounts</h3><p data-i="f3d">Passwords are protected, and you can also join as a guest.</p></div>
+ </div>
+ <div class="foot">© Kalimix<br><button id="fT" data-i="terms"></button><button id="fP" data-i="privacy"></button><button id="fC" data-i="contact"></button></div>
+</section>
+
+<div id="auth" class="hidden"><div class="card">
+ <select id="lg" class="lgs"></select>
+ <h1 data-i="appName"></h1><p data-i="pick"></p>
+ <div id="choose">
+  <button class="big primary" id="goLogin" data-i="signin"></button>
+  <button class="big ghost" id="goGuest" data-i="guest"></button>
+ </div>
+ <div id="login" class="hidden">
+  <div class="tabs"><button id="tLog" class="on" type="button" data-i="signin"></button><button id="tSign" type="button" data-i="signup"></button></div>
+  <div id="logForm">
+   <button class="soc" data-p="Google"><b style="color:#ea4335">G</b> <span data-i="google"></span></button>
+   <button class="soc fb" data-p="Facebook"><b>f</b> <span data-i="fb"></span></button>
+   <div class="sep" data-i="orMail"></div>
+   <input class="f" id="em" type="email" data-ph="email" autocomplete="email">
+   <input class="f" id="pw" type="password" data-ph="pw" autocomplete="current-password">
+   <button class="big primary" id="doLogin" data-i="enter"></button>
+   <button class="back" id="forgot" type="button" data-i="forgot"></button>
+  </div>
+  <div id="wiz" class="hidden">
+   <div class="sep" id="prog"></div>
+   <div id="lbl" style="font-weight:700;margin:6px 0"></div>
+   <input class="f" id="wi">
+   <button class="big primary" id="wNext" type="button"></button>
+   <button class="big ghost hidden" id="wSkip" type="button" data-i="skip"></button>
+   <button class="back" id="wPrev" type="button" data-i="prev"></button>
+  </div>
+  <div id="note"></div>
+  <button class="back" id="back1" data-i="back"></button>
+ </div>
+</div></div>
+
+<div id="app" class="hidden">
+ <header><span id="ttl" style="unicode-bidi:plaintext"></span>
+  <button id="bg" type="button" aria-label="menu">☰<span id="bd" class="badge hidden"></span></button>
+  <div id="dd" class="hidden">
+   <button id="miP"><span class="av" id="miAv"></span><span><b id="miN"></b><br><span class="sm" data-i="editP"></span></span></button>
+   <button id="miN2"><span>🔔</span><span data-i="notif"></span></button>
+   <button id="miA" class="hidden"><span>🛡️</span><span>admin</span></button>
+   <button id="miR"><span>🏠</span><span data-i="rooms"></span></button>
+   <button id="miD"><span>🔒</span><span data-i="dms"></span><span id="dd2" class="badge hidden" style="position:static;margin-inline-start:auto"></span></button>
+   <button id="miO"><span>🟢</span><span data-i="online"></span><span id="oc" class="sm" style="margin-inline-start:auto"></span></button>
+   <button id="miS"><span>⚙️</span><span data-i="settings"></span></button>
+  </div>
+ </header>
+ <div id="pin" class="hidden"></div>
+ <div id="an" class="hidden"><span id="ant"></span><button id="anx" type="button">✕</button></div>
+ <main id="msgs"></main>
+ <div id="tp" class="sm" style="padding:0 14px;min-height:16px"></div>
+ <div id="rb" class="hidden"><span id="rbt"></span><button type="button" id="rbx">✕</button></div>
+ <div id="rc" class="hidden"><span data-i="rec"></span><span><button id="rcs" type="button">✔</button><button id="rcx" type="button">✕</button></span></div>
+ <div id="ap" class="hidden"><button id="apI" type="button" data-i="aPhoto"></button><button id="apL" type="button" data-i="aLoc"></button><button id="apV" type="button" data-i="aVoice"></button></div>
+ <div id="ep" class="hidden"></div>
+ <form id="f"><button type="button" id="ab" class="ib">➕</button><button type="button" id="eb" class="ib">😀</button><input id="pf" type="file" accept="image/*" class="hidden"><input id="t" data-ph="msgph" autocomplete="off"><button class="sd" data-i="send"></button></form>
+</div>
+<div id="ov" class="hidden"><div id="md"></div></div>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,signInAnonymously,signOut,sendEmailVerification,sendPasswordResetEmail,GoogleAuthProvider,signInWithPopup,verifyBeforeUpdateEmail,deleteUser} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getFirestore,doc,getDoc,setDoc,updateDoc,collection,addDoc,query,orderBy,limitToLast,onSnapshot,getDocs,deleteDoc,serverTimestamp,where} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const app=initializeApp({
+  apiKey:"AIzaSyDVDnPlC0RFbtjFU1OQHmYMgZFttwBJrUg",
+  authDomain:"website-6640d.firebaseapp.com",
+  projectId:"website-6640d",
+  storageBucket:"website-6640d.firebasestorage.app",
+  messagingSenderId:"397347608169",
+  appId:"1:397347608169:web:bdb9d14046ce7aaad7f4f8"
+});
+const auth=getAuth(app),db=getFirestore(app);
+const ADMIN="laithnasrallah37@gmail.com";
+
+const $=i=>document.getElementById(i);
+const LG=["en","ar","zh","hi","es"],LN=["English","العربية","中文","हिन्दी","Español"];
+const D={
+appName:["Kalimix","Kalimix","Kalimix","Kalimix","Kalimix"],
+pick:["Choose how to continue","اختر طريقة الدخول","请选择登录方式","जारी रखने का तरीका चुनें","Elige cómo continuar"],
+signin:["Log in","تسجيل الدخول","登录","लॉग इन","Iniciar sesión"],
+signup:["Sign up","إنشاء حساب","注册","साइन अप","Crear cuenta"],
+guest:["Continue as Guest","الدخول كضيف (Guest)","以访客身份进入","अतिथि के रूप में जारी रखें","Entrar como invitado"],
+google:["Continue with Google","المتابعة بحساب Google","使用 Google 继续","Google से जारी रखें","Continuar con Google"],
+fb:["Continue with Facebook","المتابعة بحساب Facebook","使用 Facebook 继续","Facebook से जारी रखें","Continuar con Facebook"],
+orMail:["or with email","أو بالبريد الإلكتروني","或使用邮箱","या ईमेल से","o con correo"],
+email:["Email","البريد الإلكتروني","邮箱","ईमेल","Correo electrónico"],
+pw:["Password","كلمة السر","密码","पासवर्ड","Contraseña"],
+enter:["Log in","دخول","登录","लॉग इन","Entrar"],
+back:["Back","رجوع","返回","वापस","Volver"],
+next:["Next","التالي","下一步","आगे","Siguiente"],
+prev:["Previous","السابق","上一步","पीछे","Anterior"],
+finish:["Complete sign-up","إكمال التسجيل","完成注册","पंजीकरण पूरा करें","Completar registro"],
+skip:["Skip","تخطي","跳过","छोड़ें","Omitir"],
+step:["Step {a} of {b}","الخطوة {a} من {b}","第 {a} 步，共 {b} 步","चरण {a} / {b}","Paso {a} de {b}"],
+s_name:["What's your name?","ما اسمك؟","你叫什么名字？","आपका नाम क्या है?","¿Cómo te llamas?"],
+s_dob:["Your date of birth","ما تاريخ ميلادك؟","你的出生日期","आपकी जन्मतिथि","Tu fecha de nacimiento"],
+s_email:["Your personal account (email)","حسابك الشخصي (البريد الإلكتروني)","你的个人账号（邮箱）","आपका व्यक्तिगत खाता (ईमेल)","Tu cuenta personal (correo)"],
+s_pw:["Choose a password","اختر كلمة سر","设置密码","पासवर्ड चुनें","Elige una contraseña"],
+s_phone:["Phone number (optional)","رقم الهاتف (اختياري)","手机号码（可选）","फ़ोन नंबर (वैकल्पिक)","Número de teléfono (opcional)"],
+ph_name:["Full name","الاسم الكامل","姓名","पूरा नाम","Nombre completo"],
+ph_pw:["At least 6 characters","6 أحرف على الأقل","至少 6 位","कम से कम 6 अक्षर","Mínimo 6 caracteres"],
+e_name:["Enter your name.","أدخل اسمك.","请输入姓名。","अपना नाम दर्ज करें।","Escribe tu nombre."],
+e_dob:["Choose your date of birth.","اختر تاريخ ميلادك.","请选择出生日期。","जन्मतिथि चुनें।","Elige tu fecha de nacimiento."],
+e_age:["You must be at least 13.","يجب أن يكون عمرك 13 سنة على الأقل.","年龄需满 13 岁。","आपकी उम्र कम से कम 13 वर्ष होनी चाहिए।","Debes tener al menos 13 años."],
+e_mail:["Enter a valid email.","أدخل بريداً صحيحاً.","请输入有效邮箱。","मान्य ईमेल दर्ज करें।","Introduce un correo válido."],
+e_dup:["This email is already registered. Log in instead.","هذا البريد مسجّل مسبقاً، سجّل الدخول.","该邮箱已注册，请直接登录。","यह ईमेल पहले से पंजीकृत है, लॉग इन करें।","Este correo ya está registrado. Inicia sesión."],
+e_pw:["Password must be at least 6 characters.","كلمة السر 6 أحرف على الأقل.","密码至少 6 位。","पासवर्ड कम से कम 6 अक्षर का हो।","La contraseña debe tener al menos 6 caracteres."],
+e_phone:["Invalid phone number, or tap Skip.","رقم الهاتف غير صحيح، أو اضغط تخطي.","手机号无效，或点击跳过。","फ़ोन नंबर गलत है, या छोड़ें दबाएँ।","Teléfono no válido, o pulsa Omitir."],
+e_login:["Enter a valid email and a password of 6+ characters.","أدخل بريداً صحيحاً وكلمة سر من 6 أحرف على الأقل.","请输入有效邮箱和至少 6 位密码。","मान्य ईमेल और 6+ अक्षर का पासवर्ड दर्ज करें।","Introduce un correo válido y una contraseña de 6+ caracteres."],
+e_noacc:["No account with this email. Sign up first.","لا يوجد حساب بهذا البريد، أنشئ حساباً أولاً.","没有该邮箱的账号，请先注册。","इस ईमेल का कोई खाता नहीं है, पहले साइन अप करें।","No hay cuenta con este correo. Regístrate primero."],
+e_wrong:["Wrong password.","كلمة السر غير صحيحة.","密码错误。","गलत पासवर्ड।","Contraseña incorrecta."],
+e_social:["{p} login is not enabled yet. Use email or guest.","تسجيل الدخول عبر {p} غير مفعّل بعد، استخدم البريد أو ادخل كضيف.","{p} 登录尚未启用，请使用邮箱或访客。","{p} लॉगिन अभी सक्रिय नहीं है, ईमेल या अतिथि का उपयोग करें।","El acceso con {p} aún no está activo. Usa correo o invitado."],
+msgph:["Type your message…","اكتب رسالتك…","输入消息…","अपना संदेश लिखें…","Escribe tu mensaje…"],
+send:["Send","إرسال","发送","भेजें","Enviar"],
+guestN:["Guest","ضيف","访客","अतिथि","Invitado"],
+you:["You","أنت","你","आप","Tú"],
+notif:["Notifications","الإشعارات","通知","सूचनाएँ","Notificaciones"],
+settings:["Settings","الإعدادات","设置","सेटिंग्स","Ajustes"],
+editP:["Edit profile","تعديل الملف الشخصي","编辑资料","प्रोफ़ाइल संपादित करें","Editar perfil"],
+photo:["Change photo","تغيير الصورة","更换头像","फ़ोटो बदलें","Cambiar foto"],
+nameL:["Name","الاسم","姓名","नाम","Nombre"],
+save:["Save","حفظ","保存","सहेजें","Guardar"],
+close:["Close","إغلاق","关闭","बंद करें","Cerrar"],
+nEmpty:["No notifications yet.","لا توجد إشعارات.","暂无通知。","अभी कोई सूचना नहीं।","Aún no hay notificaciones."],
+nWelcome:["Welcome, {n}! 🎉","أهلاً بك، {n}! 🎉","欢迎你，{n}！🎉","स्वागत है, {n}! 🎉","¡Bienvenido, {n}! 🎉"],
+nClear:["Clear all","مسح الكل","全部清除","सभी साफ़ करें","Borrar todo"],
+lang:["Language","اللغة","语言","भाषा","Idioma"],
+nOn:["Enable notifications","تفعيل الإشعارات","开启通知","सूचनाएँ चालू करें","Activar notificaciones"],
+clearChat:["Clear chat history","مسح سجل المحادثة","清空聊天记录","चैट इतिहास साफ़ करें","Borrar historial del chat"],
+a_none:["No registered users yet.","لا يوجد مستخدمون مسجّلون بعد.","暂无注册用户。","अभी कोई पंजीकृत उपयोगकर्ता नहीं।","Aún no hay usuarios registrados."],
+dob:["Birth date","تاريخ الميلاد","出生日期","जन्मतिथि","Nacimiento"],
+phoneL:["Phone","الهاتف","电话","फ़ोन","Teléfono"],
+forgot:["Forgot password?","نسيت كلمة السر؟","忘记密码？","पासवर्ड भूल गए?","¿Olvidaste tu contraseña?"],
+resetSent:["Password reset link sent to your email.","تم إرسال رابط إعادة تعيين كلمة السر إلى بريدك.","重置密码链接已发送到你的邮箱。","पासवर्ड रीसेट लिंक आपके ईमेल पर भेजा गया।","Enlace de restablecimiento enviado a tu correo."],
+e_resetNeed:["Enter your email first.","أدخل بريدك أولاً.","请先输入邮箱。","पहले अपना ईमेल दर्ज करें।","Escribe primero tu correo."],
+e_cred:["Wrong email or password.","البريد أو كلمة السر غير صحيحة.","邮箱或密码错误。","ईमेल या पासवर्ड गलत है।","Correo o contraseña incorrectos."],
+e_gen:["Something went wrong, please try again.","حدث خطأ، حاول مرة أخرى.","出错了，请重试。","कुछ गलत हो गया, पुनः प्रयास करें।","Algo salió mal, inténtalo de nuevo."],
+verifyN:["Check your inbox to verify your email.","تحقق من بريدك لتأكيد حسابك.","请查看邮箱以验证账号。","अपना ईमेल सत्यापित करने के लिए इनबॉक्स देखें।","Revisa tu correo para verificar tu cuenta."],
+a_denied:["Access denied. Verify your email, then log in again.","تم رفض الوصول. أكّد بريدك ثم سجّل الدخول مجدداً.","访问被拒绝。请先验证邮箱并重新登录。","पहुँच अस्वीकृत। पहले ईमेल सत्यापित करें, फिर दोबारा लॉग इन करें।","Acceso denegado. Verifica tu correo e inicia sesión de nuevo."],
+tag:["Talk with anyone, instantly.","تحدّث مع أي شخص، فوراً.","随时随地，即刻畅聊。","किसी से भी, तुरंत बात करें।","Habla con cualquiera, al instante."],
+sub:["A free online chat room where you can join as a guest or create an account, in your own language.","غرفة محادثة أونلاين مجانية، ادخل كضيف أو أنشئ حساباً، وبلغتك أنت.","免费在线聊天室，可以访客身份加入或创建账号，使用你自己的语言。","एक मुफ़्त ऑनलाइन चैट रूम, अतिथि के रूप में जुड़ें या खाता बनाएँ, अपनी भाषा में।","Una sala de chat gratuita: entra como invitado o crea una cuenta, en tu idioma."],
+cta:["Get started","ابدأ الآن","立即开始","अभी शुरू करें","Empezar"],
+f1t:["Instant messages","رسائل فورية","即时消息","तुरंत संदेश","Mensajes instantáneos"],
+f1d:["Messages appear for everyone the moment you send them.","تظهر رسالتك للجميع لحظة إرسالها.","消息发送后立即对所有人可见。","संदेश भेजते ही सभी को दिखाई देता है।","Tus mensajes aparecen para todos al enviarlos."],
+f2t:["5 languages","5 لغات","5 种语言","5 भाषाएँ","5 idiomas"],
+f2d:["English, العربية, 中文, हिन्दी and Español.","English، العربية، 中文، हिन्दी، Español.","English、العربية、中文、हिन्दी、Español。","English, العربية, 中文, हिन्दी और Español।","English, العربية, 中文, हिन्दी y Español."],
+f3t:["Safe accounts","حسابات آمنة","账号安全","सुरक्षित खाते","Cuentas seguras"],
+f3d:["Passwords are protected, and you can also join as a guest.","كلمات السر محمية، ويمكنك أيضاً الدخول كضيف.","密码受到保护，也可以访客身份进入。","पासवर्ड सुरक्षित हैं, और आप अतिथि के रूप में भी जुड़ सकते हैं।","Las contraseñas están protegidas y también puedes entrar como invitado."],
+slow:["Please slow down.","مهلاً، أرسل ببطء.","请慢一点。","कृपया धीमे भेजें।","Más despacio, por favor."],
+replyTo:["Replying to {n}","رد على {n}","回复 {n}","{n} को उत्तर","Respondiendo a {n}"],
+dark:["Dark mode","الوضع الداكن","深色模式","डार्क मोड","Modo oscuro"],
+color:["Chat color","لون المحادثة","聊天颜色","चैट का रंग","Color del chat"],
+stats:["Users: {u} | Messages: {m}","المستخدمون: {u} | الرسائل: {m}","用户：{u} | 消息：{m}","उपयोगकर्ता: {u} | संदेश: {m}","Usuarios: {u} | Mensajes: {m}"],
+resetBtn:["Reset password","إعادة تعيين كلمة السر","重置密码","पासवर्ड रीसेट करें","Restablecer contraseña"],
+msgActs:["Message","الرسالة","消息","संदेश","Mensaje"],
+reply:["Reply","رد","回复","उत्तर","Responder"],
+copy:["Copy","نسخ","复制","कॉपी","Copiar"],
+copied:["Copied ✓","تم النسخ ✓","已复制 ✓","कॉपी हुआ ✓","Copiado ✓"],
+translate:["Translate","ترجمة","翻译","अनुवाद","Traducir"],
+del:["Delete","حذف","删除","हटाएँ","Eliminar"],
+aPhoto:["🖼 Photo","🖼 صورة","🖼 图片","🖼 फ़ोटो","🖼 Foto"],
+aLoc:["📍 Location","📍 موقعي","📍 位置","📍 स्थान","📍 Ubicación"],
+aVoice:["🎤 Voice","🎤 صوت","🎤 语音","🎤 आवाज़","🎤 Voz"],
+rec:["🔴 Recording… (✔ send, ✕ cancel)","🔴 جارٍ التسجيل… (✔ إرسال، ✕ إلغاء)","🔴 录音中…（✔ 发送，✕ 取消）","🔴 रिकॉर्डिंग… (✔ भेजें, ✕ रद्द)","🔴 Grabando… (✔ enviar, ✕ cancelar)"],
+e_mic:["Microphone not available.","الميكروفون غير متاح.","无法使用麦克风。","माइक्रोफ़ोन उपलब्ध नहीं।","Micrófono no disponible."],
+e_loc:["Location not available.","تعذّر تحديد الموقع.","无法获取位置。","स्थान उपलब्ध नहीं।","Ubicación no disponible."],
+sound:["Message sound","صوت الرسائل","消息提示音","संदेश ध्वनि","Sonido de mensajes"],
+bio:["About me","عن نفسي","个人简介","मेरे बारे में","Sobre mí"],
+status:["Status","الحالة","状态","स्थिति","Estado"],
+st_on:["🟢 Available","🟢 متاح","🟢 在线","🟢 उपलब्ध","🟢 Disponible"],
+st_busy:["🔴 Busy","🔴 مشغول","🔴 忙碌","🔴 व्यस्त","🔴 Ocupado"],
+st_away:["🟠 Away","🟠 بعيد","🟠 离开","🟠 दूर","🟠 Ausente"],
+changePw:["Change password","تغيير كلمة السر","修改密码","पासवर्ड बदलें","Cambiar contraseña"],
+changeEm:["Change email","تغيير البريد الإلكتروني","修改邮箱","ईमेल बदलें","Cambiar correo"],
+newEm:["New email","البريد الجديد","新邮箱","नया ईमेल","Nuevo correo"],
+e_recent:["For security, log out and log in again, then retry.","لأسباب أمنية، سجّل الخروج ثم الدخول وأعد المحاولة.","出于安全考虑，请退出并重新登录后重试。","सुरक्षा के लिए लॉग आउट करके फिर लॉग इन करें और पुनः प्रयास करें।","Por seguridad, cierra sesión, vuelve a entrar e inténtalo de nuevo."],
+emSent:["Check your new email to confirm the change.","تحقق من بريدك الجديد لتأكيد التغيير.","请查看新邮箱以确认更改。","बदलाव की पुष्टि के लिए नया ईमेल देखें।","Revisa tu nuevo correo para confirmar el cambio."],
+contact:["Contact us","اتصل بنا","联系我们","संपर्क करें","Contacto"],
+cmsg:["Your message","رسالتك","你的留言","आपका संदेश","Tu mensaje"],
+terms:["Terms of use","شروط الاستخدام","使用条款","उपयोग की शर्तें","Términos de uso"],
+privacy:["Privacy policy","سياسة الخصوصية","隐私政策","गोपनीयता नीति","Política de privacidad"],
+terms_b:["By using Kalimix you agree to be respectful: no harassment, hate, spam, illegal content or impersonation. The owner may remove messages or restrict accounts that break these rules. The service is provided as is, without guarantees of availability.","باستخدامك Kalimix فإنك توافق على احترام الآخرين: لا مضايقة ولا كراهية ولا رسائل مزعجة ولا محتوى غير قانوني ولا انتحال شخصية. يحق لصاحب الموقع حذف الرسائل أو تقييد الحسابات المخالفة. الخدمة مقدّمة كما هي دون ضمان استمرار توفرها.","使用 Kalimix 即表示你同意文明交流：禁止骚扰、仇恨言论、垃圾信息、违法内容和冒充他人。所有者有权删除消息或限制违规账号。本服务按现状提供，不保证持续可用。","Kalimix का उपयोग करके आप सम्मानजनक व्यवहार करने के लिए सहमत हैं: उत्पीड़न, नफ़रत, स्पैम, अवैध सामग्री या किसी की नकल नहीं। नियम तोड़ने वाले संदेश हटाने या खाते सीमित करने का अधिकार मालिक के पास है। सेवा जैसी है वैसी दी जाती है, उपलब्धता की गारंटी नहीं।","Al usar Kalimix aceptas ser respetuoso: sin acoso, odio, spam, contenido ilegal ni suplantación. El propietario puede eliminar mensajes o restringir cuentas que incumplan las normas. El servicio se ofrece tal cual, sin garantía de disponibilidad."],
+privacy_b:["We collect the name, email, birth date and (optionally) phone number you enter, plus your messages and profile photo. They are stored securely with Google Firebase and are not sold or shared with third parties. Only the site owner can view registered users' details. To ask for your data to be removed, use the Contact page.","نجمع الاسم والبريد الإلكتروني وتاريخ الميلاد ورقم الهاتف (اختيارياً) الذي تدخله، إضافة إلى رسائلك وصورة ملفك. تُخزَّن بأمان لدى Google Firebase ولا تُباع ولا تُشارك مع أي طرف ثالث. صاحب الموقع وحده يستطيع الاطلاع على بيانات المسجّلين. لطلب حذف بياناتك استخدم صفحة اتصل بنا.","我们会收集你填写的姓名、邮箱、出生日期和（可选的）手机号，以及你的消息和头像。数据通过 Google Firebase 安全存储，不会出售或分享给第三方。只有网站所有者可以查看注册用户的信息。如需删除数据，请通过“联系我们”提出。","हम आपके द्वारा दर्ज नाम, ईमेल, जन्मतिथि और (वैकल्पिक) फ़ोन नंबर, साथ ही आपके संदेश और प्रोफ़ाइल फ़ोटो एकत्र करते हैं। ये Google Firebase में सुरक्षित रखे जाते हैं और न बेचे जाते हैं न तीसरे पक्ष को दिए जाते हैं। केवल साइट मालिक पंजीकृत उपयोगकर्ताओं का विवरण देख सकता है। डेटा हटवाने के लिए संपर्क पृष्ठ का उपयोग करें।","Recopilamos el nombre, correo, fecha de nacimiento y (opcionalmente) el teléfono que introduces, además de tus mensajes y foto de perfil. Se guardan de forma segura en Google Firebase y no se venden ni se comparten con terceros. Solo el propietario del sitio puede ver los datos de los usuarios registrados. Para pedir que eliminen tus datos, usa la página de contacto."],
+pwa:["Tip: to install as an app, use your browser menu ⋮ → Add to Home screen.","نصيحة: لتثبيته كتطبيق، من قائمة المتصفح ⋮ اختر «إضافة إلى الشاشة الرئيسية».","提示：如需安装为应用，请在浏览器菜单 ⋮ 中选择“添加到主屏幕”。","सुझाव: ऐप की तरह इंस्टॉल करने के लिए ब्राउज़र मेनू ⋮ → होम स्क्रीन पर जोड़ें चुनें।","Consejo: para instalarlo como app, menú del navegador ⋮ → Añadir a pantalla de inicio."],
+r_general:["General","عام","综合","सामान्य","General"],
+r_games:["Games","ألعاب","游戏","गेम्स","Juegos"],
+r_study:["Study","دراسة","学习","पढ़ाई","Estudio"],
+r_music:["Music","موسيقى","音乐","संगीत","Música"],
+rooms:["Rooms","الغرف","聊天室","कक्ष","Salas"],
+dms:["Private chats","المحادثات الخاصة","私聊","निजी चैट","Chats privados"],
+online:["Online now","المتصلون الآن","在线用户","अभी ऑनलाइन","En línea ahora"],
+noOne:["Nobody yet.","لا أحد بعد.","暂无。","अभी कोई नहीं।","Nadie aún."],
+dmBtn:["💬 Message privately","💬 مراسلة خاصة","💬 私信","💬 निजी संदेश","💬 Mensaje privado"],
+typing:["{n} typing…","{n} يكتب…","{n} 正在输入…","{n} लिख रहा है…","{n} está escribiendo…"],
+report:["Report","إبلاغ","举报","रिपोर्ट करें","Denunciar"],
+reported:["Report sent. Thank you.","تم إرسال البلاغ، شكراً لك.","已提交举报，谢谢。","रिपोर्ट भेज दी गई, धन्यवाद।","Denuncia enviada. Gracias."],
+e_banned:["You are muted or banned and can't send messages.","أنت مكتوم أو محظور ولا يمكنك إرسال رسائل.","你已被禁言或封禁，无法发送消息。","आप म्यूट या प्रतिबंधित हैं, संदेश नहीं भेज सकते।","Estás silenciado o bloqueado y no puedes enviar mensajes."],
+delAcc:["Delete my account","حذف حسابي","删除我的账号","मेरा खाता हटाएँ","Eliminar mi cuenta"],
+delAsk:["This permanently deletes your account, profile and messages. This cannot be undone.","سيتم حذف حسابك وملفك ورسائلك نهائياً ولا يمكن التراجع.","这将永久删除你的账号、资料和消息，且无法撤销。","यह आपका खाता, प्रोफ़ाइल और संदेश स्थायी रूप से हटा देगा। इसे वापस नहीं किया जा सकता।","Se eliminarán para siempre tu cuenta, perfil y mensajes. No se puede deshacer."],
+delOk:["Delete forever","احذف نهائياً","永久删除","हमेशा के लिए हटाएँ","Eliminar para siempre"],
+pinned:["Pinned message","الرسالة المثبتة","置顶消息","पिन किया संदेश","Mensaje fijado"],
+annc:["Announcement","إعلان","公告","घोषणा","Anuncio"],
+reports:["Reports","البلاغات","举报","रिपोर्ट","Denuncias"],
+mute1:["Mute 1h","كتم ساعة","禁言1小时","1 घंटा म्यूट","Silenciar 1 h"],
+mute24:["Mute 24h","كتم 24 ساعة","禁言24小时","24 घंटे म्यूट","Silenciar 24 h"],
+ban:["Ban","حظر","封禁","प्रतिबंध","Bloquear"],
+unban:["Unban","إلغاء الحظر","解除封禁","प्रतिबंध हटाएँ","Desbloquear"],
+done:["Done ✓","تم ✓","完成 ✓","हो गया ✓","Hecho ✓"],
+none:["Nothing here.","لا شيء هنا.","这里没有内容。","यहाँ कुछ नहीं।","No hay nada."],
+logout:["Log out","تسجيل الخروج","退出登录","लॉग आउट","Cerrar sesión"]
+};
+let lg=localStorage.getItem("chat_lang"),me=null,mode="log",msgs=[],unsub=null,signing=false,freshNext=false;
+let cur={kind:"room",id:"general"},unsubT=null,unsubInb=null,unsubCfg=null,unsubBan=null,unsubPre=null,pt=null,pres=[],inbox=[],typingList=[],banUntil=0,cfg={};
+const ROOMS=[["general","💬"],["games","🎮"],["study","📚"],["music","🎵"]];
+const msgCol=()=>cur.kind=="dm"?collection(db,"dms",cur.chat,"msgs"):(cur.id=="general"?collection(db,"messages"):collection(db,"rooms",cur.id,"msgs"));
+const scope=()=>cur.kind=="dm"?cur.chat:cur.id;
+const pathOf=()=>cur.kind=="dm"?"":(cur.id=="general"?"messages":"rooms/"+cur.id+"/msgs");
+const chatId=(a,b)=>[a,b].sort().join("_");
+function updTitle(){$("ttl").textContent=cur.kind=="dm"?"🔒 "+cur.name:(ROOMS.find(r=>r[0]==cur.id)[1]+" "+t("r_"+cur.id))}
+function cleanup(){[unsub,unsubT,unsubInb,unsubCfg,unsubBan,unsubPre].forEach(f=>{if(f)f()});unsub=unsubT=unsubInb=unsubCfg=unsubBan=unsubPre=null;clearInterval(pt)}
+if(LG.indexOf(lg)<0){const nl=(navigator.language||"en").slice(0,2);lg=LG.indexOf(nl)>=0?nl:"en"}
+function t(k,o){let s=(D[k]||[])[LG.indexOf(lg)]||k;if(o)for(const x in o)s=s.replace("{"+x+"}",o[x]);return s}
+function show(id,on){$(id).classList.toggle("hidden",!on)}
+function ls(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+function sv(k,v){localStorage.setItem(k,JSON.stringify(v))}
+const isAdmin=()=>me&&me.email&&me.email.toLowerCase()===ADMIN;
+
+/* اللغة */
+function fillLang(sel){sel.textContent="";LG.forEach((c,i)=>{const o=document.createElement("option");o.value=c;o.textContent=LN[i];sel.appendChild(o)});sel.value=lg}
+function setLang(c){lg=c;localStorage.setItem("chat_lang",c);applyLang()}
+function applyLang(){
+  document.documentElement.lang=lg;document.documentElement.dir=lg=="ar"?"rtl":"ltr";document.title=t("appName");auth.languageCode=lg;
+  document.querySelectorAll("[data-i]").forEach(e=>e.textContent=t(e.dataset.i));
+  document.querySelectorAll("[data-ph]").forEach(e=>e.placeholder=t(e.dataset.ph));
+  $("lg").value=lg;$("lg2").value=lg;
+  if(mode=="sign"&&!$("wiz").classList.contains("hidden"))showStep();
+  if(me){render();updMenu();updTitle()}
+}
+$("lg").onchange=function(){setLang(this.value)};
+$("lg2").onchange=function(){setLang(this.value)};
+$("cta").onclick=()=>{show("land",false);show("auth",true)};
+
+/* الدخول */
+function msg(k,ok){const n=$("note");n.style.color=ok?"#2e7d32":"#c0392b";n.textContent=t(k);return false}
+const err=k=>msg(k,false);
+function fe(x){const c=(x&&x.code)||"";
+  if(c.includes("email-already-in-use"))return "e_dup";
+  if(c.includes("invalid-credential")||c.includes("wrong-password")||c.includes("user-not-found"))return "e_cred";
+  return "e_gen"}
+$("goLogin").onclick=()=>{show("choose",false);show("login",true)};
+$("back1").onclick=()=>{show("login",false);show("choose",true);$("note").textContent=""};
+$("goGuest").onclick=()=>{freshNext=true;signInAnonymously(auth).catch(x=>{show("choose",false);show("login",true);err(fe(x))})};
+document.querySelectorAll(".soc").forEach(b=>{b.onclick=()=>{
+  if(b.dataset.p=="Google"){freshNext=true;signInWithPopup(auth,new GoogleAuthProvider()).catch(x=>err(fe(x)))}
+  else $("note").textContent=t("e_social",{p:b.dataset.p})}});
+$("doLogin").onclick=()=>{
+  const e=$("em").value.trim().toLowerCase(),p=$("pw").value;
+  if(e.indexOf("@")<1||p.length<6)return err("e_login");
+  freshNext=true;signInWithEmailAndPassword(auth,e,p).catch(x=>err(fe(x)));
+};
+$("forgot").onclick=()=>{
+  const e=$("em").value.trim().toLowerCase();
+  if(e.indexOf("@")<1)return err("e_resetNeed");
+  sendPasswordResetEmail(auth,e).then(()=>msg("resetSent",true)).catch(()=>msg("resetSent",true));
+};
+const steps=[
+ {k:"name",l:"s_name",t:"text",ph:"ph_name",ac:"name"},
+ {k:"dob",l:"s_dob",t:"date"},
+ {k:"email",l:"s_email",t:"email",ph:"",ac:"email"},
+ {k:"pw",l:"s_pw",t:"password",ph:"ph_pw",ac:"new-password"},
+ {k:"phone",l:"s_phone",t:"tel",ph:"",ac:"tel",opt:1}
+];let si=0,data={};
+function showStep(){
+  const st=steps[si],w=$("wi");
+  $("prog").textContent=t("step",{a:si+1,b:steps.length});
+  $("lbl").textContent=t(st.l);w.type=st.t;w.placeholder=st.ph?t(st.ph):"";w.autocomplete=st.ac||"off";
+  w.max=st.t=="date"?new Date().toISOString().slice(0,10):"";
+  w.value=data[st.k]||"";$("note").textContent="";
+  $("wNext").textContent=t(si==steps.length-1?"finish":"next");
+  show("wSkip",!!st.opt);show("wPrev",si>0);
+}
+function setMode(m){mode=m;
+  $("tLog").classList.toggle("on",m=="log");$("tSign").classList.toggle("on",m=="sign");
+  show("logForm",m=="log");show("wiz",m=="sign");$("note").textContent="";
+  if(m=="sign"){si=0;data={};showStep()}}
+$("tLog").onclick=()=>setMode("log");
+$("tSign").onclick=()=>setMode("sign");
+function check(st,v){
+  if(st.k=="name")return v.length>=2||err("e_name");
+  if(st.k=="dob"){if(!v)return err("e_dob");const d=new Date(v),n=new Date();
+    if(d>n)return err("e_dob");
+    const age=n.getFullYear()-d.getFullYear()-((n.getMonth()<d.getMonth()||(n.getMonth()==d.getMonth()&&n.getDate()<d.getDate()))?1:0);
+    return age>=13||err("e_age");}
+  if(st.k=="email")return (v.indexOf("@")>0&&v.indexOf(".")>0)||err("e_mail");
+  if(st.k=="pw")return v.length>=6||err("e_pw");
+  if(st.k=="phone")return v===""||/^\+?\d{7,15}$/.test(v.replace(/[\s-]/g,""))||err("e_phone");
+  return true;
+}
+async function next(skip){
+  const st=steps[si],v=skip?"":$("wi").value.trim();
+  if(!check(st,v))return;
+  data[st.k]=v;
+  if(si<steps.length-1){si++;showStep();return}
+  signing=true;
+  try{
+    const c=await createUserWithEmailAndPassword(auth,data.email.toLowerCase(),data.pw);
+    await setDoc(doc(db,"users",c.user.uid),{name:data.name,email:data.email.toLowerCase(),dob:data.dob,phone:data.phone||"",avatar:"",createdAt:serverTimestamp()});
+    sendEmailVerification(c.user).catch(()=>{});
+    signing=false;await enter(c.user,true);addNotif(t("verifyN"));
+  }catch(x){signing=false;
+    if((x.code||"").includes("email-already-in-use")){si=2;showStep()}
+    err(fe(x))}
+}
+$("wNext").onclick=()=>next(false);
+$("wSkip").onclick=()=>next(true);
+$("wPrev").onclick=()=>{if(si>0){data[steps[si].k]=$("wi").value.trim();si--;showStep()}};
+$("wi").onkeydown=e=>{if(e.key=="Enter"){e.preventDefault();next(false)}};
+
+onAuthStateChanged(auth,async u=>{
+  if(signing)return;
+  if(!u){me=null;cleanup();closeM();show("dd",false);show("app",false);show("auth",false);show("land",true);show("login",false);show("choose",true);setMode("log");return}
+  const f=freshNext;freshNext=false;await enter(u,f);
+});
+async function enter(u,fresh){
+  let p;
+  if(u.isAnonymous){
+    let g=ls("g_"+u.uid,null);
+    if(!g){g={name:t("guestN")+" "+Math.floor(1000+Math.random()*9000),avatar:""};sv("g_"+u.uid,g)}
+    p=g;
+  }else{
+    const s=await getDoc(doc(db,"users",u.uid));
+    if(s.exists())p=s.data();
+    else{p={name:u.displayName||u.email.split("@")[0],email:u.email,dob:"",phone:"",avatar:u.photoURL||""};
+      await setDoc(doc(db,"users",u.uid),Object.assign({},p,{createdAt:serverTimestamp()}))}
+  }
+  me={id:u.uid,email:u.email||"",name:p.name,avatar:p.avatar||"",bio:p.bio||"",status:p.status||"on",guest:u.isAnonymous};
+  show("land",false);show("auth",false);show("app",true);
+  if(fresh)addNotif(t("nWelcome",{n:me.name}));
+  cur={kind:"room",id:"general"};updMenu();updTitle();startMsgs();startTyping();startInbox();startCfg();startBan();startPresence();updBadge();
+  if(me.avatar)img2url(me.avatar,40,true,.7).then(x=>{me.th=x});
+}
+
+/* المحادثة */
+function startMsgs(){
+  if(unsub)unsub();let first=true;msgs=[];render();
+  unsub=onSnapshot(query(msgCol(),orderBy("t"),limitToLast(100)),snap=>{
+    msgs=snap.docs.map(d=>Object.assign({id:d.id},d.data()));render();
+    if(!first)snap.docChanges().forEach(c=>{if(c.type=="added"&&!c.doc.metadata.hasPendingWrites){const m=c.doc.data();if(m.uid!==me.id){beep();addNotif((cur.kind=="dm"?"🔒 ":"")+m.n+": "+String(m.text||"🖼").slice(0,60))}}});
+    first=false;
+  });
+}
+function openChat(c){
+  cur=c;setReply(null);updTitle();startMsgs();startTyping();
+  if(c.kind=="dm")sv("dmread_"+me.id+"_"+c.other,Date.now());
+  updDot();
+}
+function startTyping(){
+  if(unsubT)unsubT();typingList=[];showTyping();
+  unsubT=onSnapshot(collection(db,"typing",scope(),"u"),snap=>{typingList=snap.docs.map(d=>d.data());showTyping()});
+}
+function showTyping(){
+  const now=Date.now(),n=typingList.filter(x=>x.uid!==me.id&&now-x.t<5000).map(x=>x.n);
+  $("tp").textContent=n.length?t("typing",{n:n.slice(0,2).join(", ")}):"";
+}
+setInterval(()=>{if(me)showTyping()},2000);
+let lastTy=0;
+$("t").addEventListener("input",()=>{if(!me||Date.now()-lastTy<3000)return;lastTy=Date.now();
+  setDoc(doc(db,"typing",scope(),"u",me.id),{uid:me.id,n:me.name,t:Date.now()}).catch(()=>{})});
+function startPresence(){
+  const beat=()=>{if(!me||document.hidden)return;setDoc(doc(db,"presence",me.id),{uid:me.id,n:me.name,a:me.th||"",s:me.status||"on",b:me.bio||"",t:Date.now()}).catch(()=>{})};
+  beat();clearInterval(pt);pt=setInterval(beat,45000);
+  document.addEventListener("visibilitychange",beat);
+  unsubPre=onSnapshot(collection(db,"presence"),snap=>{pres=snap.docs.map(d=>d.data())});
+}
+const onlineNow=()=>pres.filter(x=>Date.now()-x.t<120000);
+function startInbox(){
+  if(unsubInb)unsubInb();let first=true;
+  unsubInb=onSnapshot(collection(db,"inbox",me.id,"chats"),snap=>{
+    inbox=snap.docs.map(d=>Object.assign({id:d.id},d.data()));
+    if(!first)snap.docChanges().forEach(c=>{if(c.type!="removed"){const x=c.doc.data();
+      if(x.from!==me.id&&!(cur.kind=="dm"&&cur.other==c.doc.id)){beep();addNotif("🔒 "+x.name+": "+String(x.last||"").slice(0,60))}}});
+    if(cur.kind=="dm")sv("dmread_"+me.id+"_"+cur.other,Date.now());
+    first=false;updDot();
+  });
+}
+function unread(){return inbox.filter(x=>x.from!==me.id&&x.t>ls("dmread_"+me.id+"_"+x.id,0))}
+function updDot(){const n=unread().length;$("dd2").textContent=n;show("dd2",n>0)}
+function startCfg(){
+  if(unsubCfg)unsubCfg();
+  unsubCfg=onSnapshot(doc(db,"config","main"),s=>{cfg=s.exists()?s.data():{};
+    const p=$("pin");p.textContent=cfg.pinned?"📌 "+cfg.pinned:"";show("pin",!!cfg.pinned);
+    const on=!!cfg.an&&(cfg.anAt||0)>ls("an_seen",0);$("ant").textContent=on?"📢 "+cfg.an:"";show("an",on)});
+}
+$("anx").onclick=()=>{sv("an_seen",cfg.anAt||Date.now());show("an",false)};
+function startBan(){
+  if(unsubBan)unsubBan();banUntil=0;
+  unsubBan=onSnapshot(doc(db,"bans",me.id),s=>{banUntil=s.exists()?(s.data().until||0):0});
+}
+
+const SC={on:"#2ecc71",busy:"#e74c3c",away:"#f39c12"};
+function rich(p,text){
+  const re=/(https?:\/\/[^\s<]+)|\*\*([^*]+)\*\*|\*([^*]+)\*/g;let last=0,m;
+  while((m=re.exec(text))){
+    if(m.index>last)p.appendChild(document.createTextNode(text.slice(last,m.index)));
+    if(m[1]){const a=document.createElement("a");a.href=m[1];a.target="_blank";a.rel="noopener noreferrer";a.textContent=m[1];a.style.cssText="color:inherit;text-decoration:underline";a.onclick=e=>e.stopPropagation();p.appendChild(a)}
+    else if(m[2]){const x=document.createElement("b");x.textContent=m[2];p.appendChild(x)}
+    else{const x=document.createElement("i");x.textContent=m[3];p.appendChild(x)}
+    last=re.lastIndex}
+  if(last<text.length)p.appendChild(document.createTextNode(text.slice(last)));
+}
+function render(){
+  const box=$("msgs");box.textContent="";
+  msgs.forEach(r=>{
+    const mine=r.uid===me.id,w=document.createElement("div");w.className="mw"+(mine?" me":"");
+    const a=document.createElement("div");a.className="av sx";av(a,{name:r.n,avatar:r.a||""});a.style.boxShadow="0 0 0 2px "+(SC[r.s]||SC.on);
+    a.onclick=e=>{e.stopPropagation();cardM(r)};
+    const el=document.createElement("div");el.className="m"+(mine?" me":"");
+    const n=document.createElement("div");n.className="n";n.textContent=mine?t("you"):r.n;el.appendChild(n);
+    if(r.rp){const q=document.createElement("div");q.className="q";q.textContent=r.rp.n+": "+r.rp.text;el.appendChild(q)}
+    if(r.sk){const x=document.createElement("div");x.className="sk";x.textContent=r.sk;el.appendChild(x)}
+    if(r.text){const x=document.createElement("div");rich(x,r.text);el.appendChild(x)}
+    if(r.img){const im=document.createElement("img");im.src=r.img;im.className="mi";el.appendChild(im)}
+    if(r.au){const au=document.createElement("audio");au.controls=true;au.src=r.au;au.onclick=e=>e.stopPropagation();el.appendChild(au)}
+    if(r.rx){const c={};Object.values(r.rx).forEach(e=>{if(e)c[e]=(c[e]||0)+1});const k=Object.keys(c);
+      if(k.length){const x=document.createElement("div");x.className="rx";x.textContent=k.map(e=>e+c[e]).join("  ");el.appendChild(x)}}
+    const tm=document.createElement("div");tm.className="tm";tm.textContent=r.t?new Date(r.t).toLocaleTimeString(lg,{hour:"2-digit",minute:"2-digit"}):"";el.appendChild(tm);
+    el.onclick=()=>actM(r);
+    w.append(a,el);box.appendChild(w);
+  });
+  box.scrollTop=box.scrollHeight;
+}
+function cardM(r){
+  openM(r.n,b=>{
+    const box=document.createElement("div");box.style.textAlign="center";
+    const a=document.createElement("div");a.className="av";a.style.cssText="width:90px;height:90px;font-size:36px;margin:0 auto 10px";av(a,{name:r.n,avatar:r.a||""});
+    const s=document.createElement("div");s.textContent=t("st_"+(r.s||"on"));s.style.margin="6px 0";
+    box.append(a,s);
+    if(r.b){const p=document.createElement("div");p.textContent=r.b;p.className="sm";p.style.cssText="margin:8px 0 14px;font-size:14px";box.appendChild(p)}
+    if(r.uid&&r.uid!==me.id)box.appendChild(btn(t("dmBtn"),"primary",()=>{closeM();openChat({kind:"dm",chat:chatId(me.id,r.uid),other:r.uid,name:r.n,a:r.a||""})}));
+    b.appendChild(box)});
+}
+const banU=(uid,n,ms,kind)=>setDoc(doc(db,"bans",uid),{until:Date.now()+ms,kind:kind,name:n});
+function actM(r){
+  openM(t("msgActs"),b=>{
+    const rr=document.createElement("div");rr.style.cssText="display:flex;justify-content:space-around;margin-bottom:6px";
+    ["❤️","👍","😂","😮","😢"].forEach(e=>{const k=document.createElement("button");k.type="button";k.textContent=e;k.style.cssText="font-size:28px;background:none";
+      k.onclick=async()=>{try{await updateDoc(doc(msgCol(),r.id),{["rx."+me.id]:(r.rx&&r.rx[me.id]==e)?"":e})}catch(x){}closeM()};rr.appendChild(k)});
+    b.appendChild(rr);
+    b.appendChild(btn(t("reply"),"ghost",()=>{setReply({n:r.n,text:(r.text||"🖼").slice(0,60)});closeM();$("t").focus()}));
+    if(r.text){
+      const cb=btn(t("copy"),"ghost",()=>{(navigator.clipboard?navigator.clipboard.writeText(r.text):Promise.reject()).catch(()=>{}).then(()=>{cb.textContent=t("copied")})});b.appendChild(cb);
+      const TL={en:"en",ar:"ar",zh:"zh-CN",hi:"hi",es:"es"};
+      b.appendChild(btn(t("translate"),"ghost",()=>{window.open("https://translate.google.com/?sl=auto&tl="+TL[lg]+"&text="+encodeURIComponent(r.text)+"&op=translate","_blank","noopener")}));
+    }
+    if(r.uid!==me.id)b.appendChild(btn(t("report"),"ghost",async()=>{
+      try{await addDoc(collection(db,"reports"),{by:me.id,byName:me.name,uid:r.uid,n:r.n,text:(r.text||"🖼").slice(0,200),path:pathOf(),mid:r.id,t:Date.now()})}catch(x){}
+      closeM();flash("reported")}));
+    if(r.uid===me.id||isAdmin())b.appendChild(btn(t("del"),"ghost",async()=>{try{await deleteDoc(doc(msgCol(),r.id))}catch(x){}closeM()}));
+    if(isAdmin()&&r.uid!==me.id){
+      const mu=btn(t("mute1"),"ghost",async()=>{try{await banU(r.uid,r.n,36e5,"mute")}catch(x){}mu.textContent=t("done")});
+      const bn=btn(t("ban"),"ghost dng",async()=>{try{await banU(r.uid,r.n,3.15e11,"ban")}catch(x){}bn.textContent=t("done")});
+      b.append(mu,bn);
+    }
+  });
+}
+function img2url(src,max,sq,q){return new Promise(res=>{const im=new Image();im.onload=()=>{
+  const c=document.createElement("canvas"),x=c.getContext("2d");
+  if(sq){const s=Math.min(im.width,im.height);c.width=c.height=max;x.drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,max,max)}
+  else{const k=Math.min(1,max/Math.max(im.width,im.height));c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);x.drawImage(im,0,0,c.width,c.height)}
+  res(c.toDataURL("image/jpeg",q))};im.onerror=()=>res("");im.src=src})}
+let rpl=null,lastSend=0;
+function setReply(o){rpl=o;$("rbt").textContent=o?t("replyTo",{n:o.n})+" — "+o.text:"";show("rb",!!o)}
+function flash(k){const prev=rpl;$("rbt").textContent=t(k);show("rb",true);setTimeout(()=>{if(prev===rpl)setReply(rpl)},2500)}
+$("rbx").onclick=()=>setReply(null);
+async function sendMsg(text,img,extra){
+  if(!text&&!img&&!(extra&&(extra.sk||extra.au)))return true;
+  if(banUntil>Date.now()){flash("e_banned");return false}
+  if(Date.now()-lastSend<1500){const i=$("t");i.placeholder=t("slow");setTimeout(()=>{i.placeholder=t("msgph")},1500);return false}
+  lastSend=Date.now();
+  const d={uid:me.id,n:me.name,text:text.slice(0,500),t:Date.now(),s:me.status||"on"};
+  if(me.bio)d.b=me.bio.slice(0,100);
+  if(me.th)d.a=me.th;else if(me.avatar){const th=await img2url(me.avatar,40,true,.7);if(th)d.a=th}
+  if(rpl)d.rp=rpl;
+  if(img)d.img=img;
+  if(extra)Object.assign(d,extra);
+  setReply(null);
+  const dm=cur.kind=="dm"?{other:cur.other,name:cur.name,a:cur.a||""}:null;
+  return addDoc(msgCol(),d).then(()=>{
+    if(dm){const last=(text||(img?"🖼":(d.sk||"🎤"))).slice(0,60);
+      setDoc(doc(db,"inbox",me.id,"chats",dm.other),{name:dm.name,a:dm.a,last,t:d.t,from:me.id}).catch(()=>{});
+      setDoc(doc(db,"inbox",dm.other,"chats",me.id),{name:me.name,a:me.th||"",last,t:d.t,from:me.id}).catch(()=>{})}
+    return true}).catch(()=>false);
+}
+$("f").onsubmit=async e=>{e.preventDefault();const i=$("t"),v=i.value.trim();if(!v)return;i.value="";show("ep",false);show("ap",false);const ok=await sendMsg(v,null);if(ok===false)i.value=v};
+$("ab").onclick=()=>{show("ep",false);show("ap",$("ap").classList.contains("hidden"))};
+$("eb").onclick=()=>{show("ap",false);show("ep",$("ep").classList.contains("hidden"))};
+$("apI").onclick=()=>{show("ap",false);$("pf").click()};
+$("pf").onchange=()=>{const f=$("pf").files[0];$("pf").value="";if(!f)return;const r=new FileReader();r.onload=async()=>{const u=await img2url(r.result,480,false,.6);if(u)sendMsg("",u)};r.readAsDataURL(f)};
+$("apL").onclick=()=>{show("ap",false);
+  if(!navigator.geolocation)return flash("e_loc");
+  navigator.geolocation.getCurrentPosition(p=>sendMsg("📍 https://www.google.com/maps?q="+p.coords.latitude.toFixed(5)+","+p.coords.longitude.toFixed(5),null),()=>flash("e_loc"),{timeout:10000})};
+let mr=null,chunks=[],rtimer=null,keep=true;
+$("apV").onclick=async()=>{show("ap",false);
+  if(mr||!window.MediaRecorder||!navigator.mediaDevices)return flash("e_mic");
+  try{const st=await navigator.mediaDevices.getUserMedia({audio:true});
+    mr=new MediaRecorder(st,{audioBitsPerSecond:24000});chunks=[];keep=true;
+    mr.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
+    mr.onstop=()=>{clearTimeout(rtimer);st.getTracks().forEach(x=>x.stop());show("rc",false);const mt=mr.mimeType;mr=null;
+      if(!keep||!chunks.length)return;
+      const fr=new FileReader();fr.onload=()=>sendMsg("",null,{au:fr.result});fr.readAsDataURL(new Blob(chunks,{type:mt}))};
+    mr.start();show("rc",true);rtimer=setTimeout(()=>{if(mr)mr.stop()},20000);
+  }catch(x){flash("e_mic")}};
+$("rcs").onclick=()=>{if(mr)mr.stop()};
+$("rcx").onclick=()=>{keep=false;if(mr)mr.stop()};
+"😀 😂 😍 😎 🥳 😢 😡 👍 👎 🙏 👏 🔥 ❤️ 💔 🎉 ✨ 😴 🤔 😅 😉 🙌 💪 👋 🌹".split(" ").forEach(e=>{const b=document.createElement("button");b.type="button";b.textContent=e;b.onclick=()=>{$("t").value+=e;$("t").focus()};$("ep").appendChild(b)});
+const sep=document.createElement("div");sep.style.cssText="width:100%;height:1px;background:#dde1ea;margin:4px 0";$("ep").appendChild(sep);
+"🐱 🐶 🦄 🐼 🍕 🎂 🚀 🏆 💯 🤝".split(" ").forEach(e=>{const b=document.createElement("button");b.type="button";b.textContent=e;b.style.fontSize="34px";b.onclick=()=>{show("ep",false);sendMsg("",null,{sk:e})};$("ep").appendChild(b)});
+function beep(){if(ls("chat_snd",true)===false)return;try{const c=new (window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=880;g.gain.value=.08;o.start();o.stop(c.currentTime+.15)}catch(e){}}
+function applyTheme(){document.body.classList.toggle("dark",ls("chat_dark",false)===true);document.documentElement.style.setProperty("--mc",ls("chat_color","#2f6df6"))}
+
+/* القائمة */
+function av(el,p){el.textContent="";el.style.backgroundImage="";
+  if(p.avatar)el.style.backgroundImage="url("+p.avatar+")";else el.textContent=(p.name||"?").trim().charAt(0).toUpperCase()}
+function updMenu(){av($("miAv"),me);$("miN").textContent=me.name;show("miA",isAdmin())}
+$("bg").onclick=e=>{e.stopPropagation();$("oc").textContent=onlineNow().length||"";updDot();show("dd",$("dd").classList.contains("hidden"))};
+$("miR").onclick=()=>{show("dd",false);roomsM()};
+$("miD").onclick=()=>{show("dd",false);inboxM()};
+$("miO").onclick=()=>{show("dd",false);onlineM()};
+document.addEventListener("click",e=>{if(!$("dd").contains(e.target))show("dd",false)});
+$("miP").onclick=()=>{show("dd",false);profileM()};
+$("miN2").onclick=()=>{show("dd",false);notifM()};
+$("miS").onclick=()=>{show("dd",false);settingsM()};
+$("miA").onclick=()=>{show("dd",false);adminM()};
+
+function openM(title,build){const b=$("md");b.textContent="";const h=document.createElement("h2");h.textContent=title;b.appendChild(h);build(b);
+  const c=document.createElement("button");c.className="big ghost";c.textContent=t("close");c.onclick=closeM;b.appendChild(c);show("ov",true)}
+function closeM(){show("ov",false)}
+$("ov").onclick=function(e){if(e.target==this)closeM()};
+function btn(txt,cls,fn){const b=document.createElement("button");b.className="big "+cls;b.textContent=txt;b.onclick=fn;return b}
+
+function profileM(){
+  openM(t("editP"),b=>{
+    let tmp=me.avatar;const box=document.createElement("div");box.style.textAlign="center";
+    const a=document.createElement("div");a.className="av";a.style.cssText="width:90px;height:90px;font-size:36px;margin:0 auto 10px";av(a,{name:me.name,avatar:tmp});
+    const f=document.createElement("input");f.type="file";f.accept="image/*";f.className="hidden";
+    f.onchange=()=>{const fl=f.files[0];if(!fl)return;const r=new FileReader();r.onload=async()=>{tmp=await img2url(r.result,128,true,.8);av(a,{name:me.name,avatar:tmp})};r.readAsDataURL(fl)};
+    const ph=btn(t("photo"),"ghost",()=>f.click());
+    const nm=document.createElement("input");nm.className="f";nm.value=me.name;nm.placeholder=t("nameL");
+    const bi=document.createElement("input");bi.className="f";bi.maxLength=100;bi.value=me.bio||"";bi.placeholder=t("bio");
+    const st=document.createElement("select");st.className="lgs";st.style.cssText="width:100%;margin-top:10px;padding:12px";
+    [["on","st_on"],["busy","st_busy"],["away","st_away"]].forEach(x=>{const o=document.createElement("option");o.value=x[0];o.textContent=t(x[1]);st.appendChild(o)});st.value=me.status||"on";
+    const sb=btn(t("save"),"primary",async()=>{
+      const v=nm.value.trim();if(v.length<2)return;
+      me.name=v;me.avatar=tmp;me.bio=bi.value.trim();me.status=st.value;
+      try{if(me.guest)sv("g_"+me.id,{name:v,avatar:tmp,bio:me.bio,status:me.status});else await updateDoc(doc(db,"users",me.id),{name:v,avatar:tmp,bio:me.bio,status:me.status})}catch(x){}
+      updMenu();closeM()});
+    box.append(a,f,ph,nm,bi,st,sb);b.appendChild(box)});
+}
+const nKey=()=>"chat_notifs_"+me.id;
+function addNotif(x){if(ls("chat_nOn",true)===false)return;const a=ls(nKey(),[]);a.unshift({x:x,t:Date.now(),r:0});sv(nKey(),a.slice(0,30));updBadge()}
+function updBadge(){if(!me)return;const n=ls(nKey(),[]).filter(o=>!o.r).length;$("bd").textContent=n;show("bd",n>0)}
+function notifM(){
+  const a=ls(nKey(),[]);
+  openM(t("notif"),b=>{
+    if(!a.length){const e=document.createElement("div");e.className="sm";e.textContent=t("nEmpty");b.appendChild(e)}
+    a.forEach(o=>{const d=document.createElement("div");d.className="nt"+(o.r?"":" u");d.textContent=o.x;
+      const s=document.createElement("div");s.className="sm";s.textContent=new Date(o.t).toLocaleString(lg);d.appendChild(s);b.appendChild(d)});
+    if(a.length)b.appendChild(btn(t("nClear"),"ghost",()=>{sv(nKey(),[]);updBadge();notifM()}));
+  });
+  a.forEach(o=>{o.r=1});sv(nKey(),a);updBadge();
+}
+function rowEl(av0,title,sub,fn){
+  const d=document.createElement("div");d.className="chatrow";const a=document.createElement("div");a.className="av sx";av(a,av0);
+  const x=document.createElement("div");x.style.cssText="flex:1;min-width:0";const n=document.createElement("b");n.textContent=title;x.appendChild(n);
+  if(sub){const u=document.createElement("div");u.className="sm";u.style.cssText="white-space:nowrap;overflow:hidden;text-overflow:ellipsis";u.textContent=sub;x.appendChild(u)}
+  d.append(a,x);d.onclick=fn;return d}
+function roomsM(){openM(t("rooms"),b=>ROOMS.forEach(r=>{
+  const d=rowEl({name:r[1],avatar:""},t("r_"+r[0])+(cur.kind=="room"&&cur.id==r[0]?"  ✓":""),"",()=>{closeM();openChat({kind:"room",id:r[0]})});b.appendChild(d)}))}
+function inboxM(){const list=inbox.slice().sort((x,y)=>y.t-x.t);
+  openM(t("dms"),b=>{
+    if(!list.length){const e=document.createElement("div");e.className="sm";e.textContent=t("none");b.appendChild(e)}
+    list.forEach(x=>{const un=x.from!==me.id&&x.t>ls("dmread_"+me.id+"_"+x.id,0);
+      b.appendChild(rowEl({name:x.name,avatar:x.a||""},(un?"🔵 ":"")+x.name,x.last,()=>{closeM();openChat({kind:"dm",chat:chatId(me.id,x.id),other:x.id,name:x.name,a:x.a||""})}))})})}
+function onlineM(){const list=onlineNow();
+  openM(t("online")+" ("+list.length+")",b=>{
+    if(!list.length){const e=document.createElement("div");e.className="sm";e.textContent=t("noOne");b.appendChild(e)}
+    list.forEach(x=>b.appendChild(rowEl({name:x.n,avatar:x.a||""},x.n+(x.uid===me.id?" ("+t("you")+")":""),t("st_"+(x.s||"on")),()=>cardM(x))))})}
+function textM(tk,bk){openM(t(tk),b=>{const p=document.createElement("p");p.textContent=t(bk);p.style.lineHeight="1.7";b.appendChild(p)})}
+function contactM(){openM(t("contact"),b=>{
+  const a=document.createElement("textarea");a.rows=5;a.placeholder=t("cmsg");a.style.cssText="width:100%;padding:12px;border-radius:12px;border:1px solid #dde1ea;font:inherit;margin-bottom:6px";
+  b.append(a,btn(t("send"),"primary",()=>{const v=a.value.trim();if(!v)return;location.href="mailto:"+ADMIN+"?subject="+encodeURIComponent("Kalimix")+"&body="+encodeURIComponent(v+(me?"\n\n— "+me.name:""))}))})}
+function emailM(){openM(t("changeEm"),b=>{
+  const i=document.createElement("input");i.className="f";i.type="email";i.placeholder=t("newEm");
+  const n=document.createElement("div");n.className="sm";n.style.margin="8px 0";
+  b.append(i,n,btn(t("save"),"primary",()=>{const v=i.value.trim().toLowerCase();if(v.indexOf("@")<1){n.textContent=t("e_mail");return}
+    verifyBeforeUpdateEmail(auth.currentUser,v).then(()=>{n.textContent=t("emSent")}).catch(x=>{n.textContent=t((x.code||"").includes("recent")?"e_recent":"e_gen")})}))})}
+function delM(){openM(t("delAcc"),b=>{
+  const p=document.createElement("p");p.textContent=t("delAsk");p.style.lineHeight="1.6";const n=document.createElement("div");n.className="sm";n.style.margin="8px 0";
+  b.append(p,n,btn(t("delOk"),"ghost dng",async()=>{
+    try{
+      for(const path of ["messages","rooms/games/msgs","rooms/study/msgs","rooms/music/msgs"]){
+        const s=await getDocs(query(collection(db,path),where("uid","==",me.id)));await Promise.all(s.docs.map(d=>deleteDoc(d.ref)))}
+      await deleteDoc(doc(db,"presence",me.id)).catch(()=>{});
+      if(!me.guest)await deleteDoc(doc(db,"users",me.id));
+      await deleteUser(auth.currentUser);
+    }catch(x){n.textContent=t((x.code||"").includes("recent")?"e_recent":"e_gen")}}))})}
+function settingsM(){
+  openM(t("settings"),b=>{
+    const row=(lab,ctrl)=>{const r=document.createElement("div");r.className="row";const l=document.createElement("span");l.textContent=lab;r.append(l,ctrl);b.appendChild(r)};
+    const chk=(lab,key,def,cb)=>{const c=document.createElement("input");c.type="checkbox";c.checked=!!ls(key,def);c.onchange=()=>{sv(key,c.checked);if(cb)cb()};row(lab,c)};
+    const s=document.createElement("select");s.className="lgs";fillLang(s);s.onchange=()=>{setLang(s.value);settingsM()};row(t("lang"),s);
+    chk(t("nOn"),"chat_nOn",true);chk(t("sound"),"chat_snd",true);chk(t("dark"),"chat_dark",false,applyTheme);
+    const sw=document.createElement("span");
+    ["#2f6df6","#8e44ad","#16a085","#e67e22","#e91e63"].forEach(c=>{const k=document.createElement("button");k.type="button";k.className="sw"+(ls("chat_color","#2f6df6")==c?" on":"");k.style.background=c;
+      k.onclick=()=>{sv("chat_color",c);applyTheme();settingsM()};sw.appendChild(k)});row(t("color"),sw);
+    if(!me.guest){
+      const bp=btn(t("changePw"),"ghost",()=>{sendPasswordResetEmail(auth,me.email).catch(()=>{});bp.textContent=t("resetSent")});b.appendChild(bp);
+      b.appendChild(btn(t("changeEm"),"ghost",emailM));
+    }
+    b.append(btn(t("contact"),"ghost",contactM),btn(t("terms"),"ghost",()=>textM("terms","terms_b")),btn(t("privacy"),"ghost",()=>textM("privacy","privacy_b")));
+    if(isAdmin())b.appendChild(btn(t("clearChat"),"ghost",async()=>{try{const s=await getDocs(collection(db,"messages"));await Promise.all(s.docs.map(d=>deleteDoc(d.ref)))}catch(x){}}));
+    const h=document.createElement("div");h.className="sm";h.style.margin="12px 0 0";h.textContent=t("pwa");b.appendChild(h);
+    b.appendChild(btn(t("delAcc"),"ghost dng",delM));
+    b.appendChild(btn(t("logout"),"ghost",async()=>{try{await setDoc(doc(db,"presence",me.id),{uid:me.id,n:me.name,t:0})}catch(x){}signOut(auth)}));
+  });
+}
+
+/* لوحة المالك */
+function adminM(){if(!isAdmin())return;openM("admin",b=>{
+  b.appendChild(btn("G And P","primary",gpM));
+  b.appendChild(btn(t("reports"),"ghost",reportsM));
+  b.appendChild(btn(t("pinned"),"ghost",()=>cfgM("pinned")));
+  b.appendChild(btn(t("annc"),"ghost",()=>cfgM("an")))})}
+function cfgM(k){openM(t(k=="an"?"annc":"pinned"),b=>{
+  const a=document.createElement("textarea");a.rows=4;a.value=cfg[k]||"";a.style.cssText="width:100%;padding:12px;border-radius:12px;border:1px solid #dde1ea;font:inherit;margin-bottom:6px";
+  const sv2=btn(t("save"),"primary",async()=>{const v=a.value.trim().slice(0,300);
+    const d=Object.assign({},cfg,k=="an"?{an:v,anAt:Date.now()}:{pinned:v});
+    try{await setDoc(doc(db,"config","main"),d)}catch(x){}sv2.textContent=t("done")});
+  b.append(a,sv2)})}
+async function reportsM(){
+  if(!isAdmin())return;let list=[];
+  try{list=(await getDocs(collection(db,"reports"))).docs.map(d=>Object.assign({id:d.id},d.data())).sort((x,y)=>y.t-x.t)}catch(x){}
+  openM(t("reports")+" ("+list.length+")",b=>{
+    if(!list.length){const e=document.createElement("div");e.className="sm";e.textContent=t("none");b.appendChild(e)}
+    list.forEach(o=>{const d=document.createElement("div");d.className="nt";
+      const h=document.createElement("b");h.textContent=o.n;const tx=document.createElement("div");tx.textContent=o.text;
+      const by=document.createElement("div");by.className="sm";by.textContent="← "+o.byName;d.append(h,tx,by);
+      const mk=(label,fn,cls)=>{const x=document.createElement("button");x.className="mini "+(cls||"");x.textContent=label;x.onclick=async()=>{try{await fn()}catch(e){}x.textContent=t("done");x.disabled=true};d.appendChild(x)};
+      if(o.path)mk(t("del"),async()=>{await deleteDoc(doc(db,o.path,o.mid));await deleteDoc(doc(db,"reports",o.id))});
+      mk(t("mute1"),()=>banU(o.uid,o.n,36e5,"mute"));
+      mk(t("ban"),()=>banU(o.uid,o.n,3.15e11,"ban"),"dng");
+      mk("✕",()=>deleteDoc(doc(db,"reports",o.id)));
+      b.appendChild(d)})})
+}
+async function gpM(){
+  if(!isAdmin())return;
+  let list=null,mc=0,bs={};
+  try{await auth.currentUser.reload();await auth.currentUser.getIdToken(true);
+    list=(await getDocs(collection(db,"users"))).docs.map(d=>Object.assign({id:d.id},d.data()));
+    mc=(await getDocs(collection(db,"messages"))).docs.length;
+    (await getDocs(collection(db,"bans"))).docs.forEach(d=>{bs[d.id]=d.data()})}catch(x){}
+  openM("G And P"+(list?" ("+list.length+")":""),b=>{
+    if(!list){const e=document.createElement("div");e.className="sm";e.textContent=t("a_denied");b.appendChild(e);return}
+    const st=document.createElement("div");st.className="nt";st.textContent=t("stats",{u:list.length,m:mc});b.appendChild(st);
+    if(!list.length){const e=document.createElement("div");e.className="sm";e.textContent=t("a_none");b.appendChild(e)}
+    list.forEach(o=>{const d=document.createElement("div");d.className="nt";
+      const n=document.createElement("b");n.textContent=o.name||"";
+      const l=document.createElement("div");l.className="sm";
+      l.textContent=(o.email||"")+" | "+t("dob")+": "+(o.dob||"-")+" | "+t("phoneL")+": "+(o.phone||"-");
+      d.append(n,l);
+      const mk=(label,fn,cls)=>{const x=document.createElement("button");x.className="mini "+(cls||"");x.textContent=label;x.onclick=async()=>{try{await fn()}catch(e){}x.textContent=t("done");x.disabled=true};d.appendChild(x)};
+      if(o.email)mk(t("resetBtn"),()=>sendPasswordResetEmail(auth,o.email));
+      if(o.id!==me.id){
+        if(bs[o.id]&&bs[o.id].until>Date.now())mk(t("unban"),()=>deleteDoc(doc(db,"bans",o.id)));
+        else{mk(t("mute1"),()=>banU(o.id,o.name,36e5,"mute"));mk(t("mute24"),()=>banU(o.id,o.name,864e5,"mute"));mk(t("ban"),()=>banU(o.id,o.name,3.15e11,"ban"),"dng")}}
+      b.appendChild(d)});
+  });
+}
+
+/* البداية */
+applyTheme();fillLang($("lg"));fillLang($("lg2"));applyLang();
+$("fT").onclick=()=>textM("terms","terms_b");$("fP").onclick=()=>textM("privacy","privacy_b");$("fC").onclick=contactM;
+try{const mf={name:"Kalimix",short_name:"Kalimix",start_url:location.href.split("#")[0],display:"standalone",background_color:"#2a1a5e",theme_color:"#2a1a5e",
+  icons:[{src:"data:image/svg+xml;utf8,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="110" fill="#2a1a5e"/><text x="256" y="350" font-size="300" text-anchor="middle" fill="#fff" font-family="Arial" font-weight="700">K</text></svg>'),sizes:"any",type:"image/svg+xml"}]};
+  const l=document.createElement("link");l.rel="manifest";l.href="data:application/manifest+json,"+encodeURIComponent(JSON.stringify(mf));document.head.appendChild(l)}catch(e){}
+</script>
+</body>
+</html>
