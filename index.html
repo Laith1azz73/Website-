@@ -165,7 +165,7 @@ body.dark .sm{color:#9aa3b8}
 
 <div id="app" class="hidden">
  <header><span id="ttl" style="unicode-bidi:plaintext"></span>
-  <button id="bg" type="button" aria-label="menu">☰<span id="bd" class="badge hidden"></span></button>
+  <button id="bg" type="button" aria-label="menu" style="position:relative">☰<span id="bd" class="badge hidden"></span><span id="bd2" class="badge hidden" style="left:-4px;right:auto;background:#2f6df6"></span></button>
   <div id="dd" class="hidden">
    <button id="miP"><span class="av" id="miAv"></span><span><b id="miN"></b><br><span class="sm" data-i="editP"></span></span></button>
    <button id="miN2"><span>🔔</span><span data-i="notif"></span></button>
@@ -192,6 +192,7 @@ body.dark .sm{color:#9aa3b8}
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,signInAnonymously,signOut,sendEmailVerification,sendPasswordResetEmail,GoogleAuthProvider,signInWithPopup,verifyBeforeUpdateEmail,deleteUser} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {getFirestore,doc,getDoc,setDoc,updateDoc,collection,addDoc,query,orderBy,limitToLast,onSnapshot,getDocs,deleteDoc,serverTimestamp,where} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {getStorage,ref as sRef,uploadBytes,getDownloadURL} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
 const app=initializeApp({
   apiKey:"AIzaSyDVDnPlC0RFbtjFU1OQHmYMgZFttwBJrUg",
@@ -201,7 +202,7 @@ const app=initializeApp({
   messagingSenderId:"397347608169",
   appId:"1:397347608169:web:bdb9d14046ce7aaad7f4f8"
 });
-const auth=getAuth(app),db=getFirestore(app);
+const auth=getAuth(app),db=getFirestore(app),storage=getStorage(app);
 const ADMIN="laithnasrallah37@gmail.com";
 
 const $=i=>document.getElementById(i);
@@ -338,18 +339,27 @@ mute24:["Mute 24h","كتم 24 ساعة","禁言24小时","24 घंटे म्
 ban:["Ban","حظر","封禁","प्रतिबंध","Bloquear"],
 unban:["Unban","إلغاء الحظر","解除封禁","प्रतिबंध हटाएँ","Desbloquear"],
 done:["Done ✓","تم ✓","完成 ✓","हो गया ✓","Hecho ✓"],
-none:["Nothing here.","لا شيء هنا.","这里没有内容。","यहाँ कुछ नहीं।","No hay nada."],
+none:["Nothing here.","لا شيء هنا。","这里没有内容。","यहाँ कुछ नहीं।","No hay nada."],
 logout:["Log out","تسجيل الخروج","退出登录","लॉग आउट","Cerrar sesión"]
 };
 let lg=localStorage.getItem("chat_lang"),me=null,mode="log",msgs=[],unsub=null,signing=false,freshNext=false;
 let cur={kind:"room",id:"general"},unsubT=null,unsubInb=null,unsubCfg=null,unsubBan=null,unsubPre=null,pt=null,pres=[],inbox=[],typingList=[],banUntil=0,cfg={};
+let _typingTimer=null,_actx=null;
 const ROOMS=[["general","💬"],["games","🎮"],["study","📚"],["music","🎵"]];
 const msgCol=()=>cur.kind=="dm"?collection(db,"dms",cur.chat,"msgs"):(cur.id=="general"?collection(db,"messages"):collection(db,"rooms",cur.id,"msgs"));
 const scope=()=>cur.kind=="dm"?cur.chat:cur.id;
 const pathOf=()=>cur.kind=="dm"?"":(cur.id=="general"?"messages":"rooms/"+cur.id+"/msgs");
-const chatId=(a,b)=>[a,b].sort().join("_");
-function updTitle(){$("ttl").textContent=cur.kind=="dm"?"🔒 "+cur.name:(ROOMS.find(r=>r[0]==cur.id)[1]+" "+t("r_"+cur.id))}
-function cleanup(){[unsub,unsubT,unsubInb,unsubCfg,unsubBan,unsubPre].forEach(f=>{if(f)f()});unsub=unsubT=unsubInb=unsubCfg=unsubBan=unsubPre=null;clearInterval(pt)}
+const chatId=(a,b)=>[a,b].sort().join("__");
+function updTitle(){
+  if(cur.kind=="dm"){ $("ttl").textContent="🔒 "+cur.name; }
+  else { const r=ROOMS.find(r=>r[0]==cur.id); $("ttl").textContent=(r?r[1]+" ":"")+t("r_"+cur.id)+"  🟢 "+(onlineNow().length||0); }
+}
+function cleanup(){
+  [unsub,unsubT,unsubInb,unsubCfg,unsubBan,unsubPre].forEach(f=>{if(f)f()});
+  unsub=unsubT=unsubInb=unsubCfg=unsubBan=unsubPre=null;
+  if(pt)clearInterval(pt);
+  if(_typingTimer)clearInterval(_typingTimer);
+}
 if(LG.indexOf(lg)<0){const nl=(navigator.language||"en").slice(0,2);lg=LG.indexOf(nl)>=0?nl:"en"}
 function t(k,o){let s=(D[k]||[])[LG.indexOf(lg)]||k;if(o)for(const x in o)s=s.replace("{"+x+"}",o[x]);return s}
 function show(id,on){$(id).classList.toggle("hidden",!on)}
@@ -466,9 +476,11 @@ async function enter(u,fresh){
       await setDoc(doc(db,"users",u.uid),Object.assign({},p,{createdAt:serverTimestamp()}))}
   }
   me={id:u.uid,email:u.email||"",name:p.name,avatar:p.avatar||"",bio:p.bio||"",status:p.status||"on",guest:u.isAnonymous};
+  // حماية خفيفة من انتحال الأسماء
+  if(!isAdmin()&&/admin|owner|moderator/i.test(me.name)) me.name="User "+Math.floor(Math.random()*9999);
   show("land",false);show("auth",false);show("app",true);
   if(fresh)addNotif(t("nWelcome",{n:me.name}));
-  cur={kind:"room",id:"general"};updMenu();updTitle();startMsgs();startTyping();startInbox();startCfg();startBan();startPresence();updBadge();
+  cur={kind:"room",id:"general"};updMenu();updTitle();startMsgs();startTyping();startTypingTimer();startInbox();startCfg();startBan();startPresence();updBadge();
   if(me.avatar)img2url(me.avatar,40,true,.7).then(x=>{me.th=x});
 }
 
@@ -490,19 +502,29 @@ function startTyping(){
   if(unsubT)unsubT();typingList=[];showTyping();
   unsubT=onSnapshot(collection(db,"typing",scope(),"u"),snap=>{typingList=snap.docs.map(d=>d.data());showTyping()});
 }
+function startTypingTimer(){
+  if(_typingTimer)clearInterval(_typingTimer);
+  _typingTimer=setInterval(()=>{if(me)showTyping()},2000);
+}
 function showTyping(){
   const now=Date.now(),n=typingList.filter(x=>x.uid!==me.id&&now-x.t<5000).map(x=>x.n);
   $("tp").textContent=n.length?t("typing",{n:n.slice(0,2).join(", ")}):"";
 }
-setInterval(()=>{if(me)showTyping()},2000);
-let lastTy=0;
-$("t").addEventListener("input",()=>{if(!me||Date.now()-lastTy<3000)return;lastTy=Date.now();
-  setDoc(doc(db,"typing",scope(),"u",me.id),{uid:me.id,n:me.name,t:Date.now()}).catch(()=>{})});
+let lastTy=0,tyDebounce=null;
+$("t").addEventListener("input",()=>{
+  if(!me)return;
+  if(tyDebounce)clearTimeout(tyDebounce);
+  tyDebounce=setTimeout(()=>{
+    if(Date.now()-lastTy<2500)return;
+    lastTy=Date.now();
+    setDoc(doc(db,"typing",scope(),"u",me.id),{uid:me.id,n:me.name,t:Date.now()}).catch(()=>{});
+  },400);
+});
 function startPresence(){
   const beat=()=>{if(!me||document.hidden)return;setDoc(doc(db,"presence",me.id),{uid:me.id,n:me.name,a:me.th||"",s:me.status||"on",b:me.bio||"",t:Date.now()}).catch(()=>{})};
   beat();clearInterval(pt);pt=setInterval(beat,45000);
   document.addEventListener("visibilitychange",beat);
-  unsubPre=onSnapshot(collection(db,"presence"),snap=>{pres=snap.docs.map(d=>d.data())});
+  unsubPre=onSnapshot(collection(db,"presence"),snap=>{pres=snap.docs.map(d=>d.data());if(me)updTitle()});
 }
 const onlineNow=()=>pres.filter(x=>Date.now()-x.t<120000);
 function startInbox(){
@@ -516,7 +538,11 @@ function startInbox(){
   });
 }
 function unread(){return inbox.filter(x=>x.from!==me.id&&x.t>ls("dmread_"+me.id+"_"+x.id,0))}
-function updDot(){const n=unread().length;$("dd2").textContent=n;show("dd2",n>0)}
+function updDot(){
+  const n=unread().length;
+  $("dd2").textContent=n;show("dd2",n>0);
+  $("bd2").textContent=n;show("bd2",n>0);
+}
 function startCfg(){
   if(unsubCfg)unsubCfg();
   unsubCfg=onSnapshot(doc(db,"config","main"),s=>{cfg=s.exists()?s.data():{};
@@ -551,12 +577,21 @@ function render(){
     if(r.rp){const q=document.createElement("div");q.className="q";q.textContent=r.rp.n+": "+r.rp.text;el.appendChild(q)}
     if(r.sk){const x=document.createElement("div");x.className="sk";x.textContent=r.sk;el.appendChild(x)}
     if(r.text){const x=document.createElement("div");rich(x,r.text);el.appendChild(x)}
-    if(r.img){const im=document.createElement("img");im.src=r.img;im.className="mi";el.appendChild(im)}
+    if(r.img){const im=document.createElement("img");im.src=r.img;im.className="mi";im.loading="lazy";el.appendChild(im)}
     if(r.au){const au=document.createElement("audio");au.controls=true;au.src=r.au;au.onclick=e=>e.stopPropagation();el.appendChild(au)}
     if(r.rx){const c={};Object.values(r.rx).forEach(e=>{if(e)c[e]=(c[e]||0)+1});const k=Object.keys(c);
       if(k.length){const x=document.createElement("div");x.className="rx";x.textContent=k.map(e=>e+c[e]).join("  ");el.appendChild(x)}}
     const tm=document.createElement("div");tm.className="tm";tm.textContent=r.t?new Date(r.t).toLocaleTimeString(lg,{hour:"2-digit",minute:"2-digit"}):"";el.appendChild(tm);
-    el.onclick=()=>actM(r);
+    // long-press للجوال + click على الحاسوب
+    let _lp=null,_lpMoved=false;
+    el.addEventListener("touchstart",e=>{
+      _lpMoved=false;
+      _lp=setTimeout(()=>{if(!_lpMoved)actM(r)},450);
+    },{passive:true});
+    el.addEventListener("touchmove",()=>{_lpMoved=true;if(_lp)clearTimeout(_lp)},{passive:true});
+    el.addEventListener("touchend",()=>{if(_lp)clearTimeout(_lp)});
+    el.addEventListener("contextmenu",e=>{e.preventDefault();actM(r)});
+    el.addEventListener("click",e=>{if(e.detail===1&&!('ontouchstart' in window))actM(r)});
     w.append(a,el);box.appendChild(w);
   });
   box.scrollTop=box.scrollHeight;
@@ -595,11 +630,20 @@ function actM(r){
     }
   });
 }
-function img2url(src,max,sq,q){return new Promise(res=>{const im=new Image();im.onload=()=>{
+function img2url(src,max,sq,q){return new Promise(res=>{const im=new Image();im.crossOrigin="anonymous";im.onload=()=>{
   const c=document.createElement("canvas"),x=c.getContext("2d");
   if(sq){const s=Math.min(im.width,im.height);c.width=c.height=max;x.drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,max,max)}
   else{const k=Math.min(1,max/Math.max(im.width,im.height));c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);x.drawImage(im,0,0,c.width,c.height)}
   res(c.toDataURL("image/jpeg",q))};im.onerror=()=>res("");im.src=src})}
+async function uploadImage(dataUrl,path){
+  try{
+    const res=await fetch(dataUrl);const blob=await res.blob();
+    if(blob.size>900*1024)return "";
+    const r=sRef(storage,path+"/"+Date.now()+"_"+Math.random().toString(36).slice(2)+".jpg");
+    await uploadBytes(r,blob,{contentType:"image/jpeg"});
+    return await getDownloadURL(r);
+  }catch(e){return ""}
+}
 let rpl=null,lastSend=0;
 function setReply(o){rpl=o;$("rbt").textContent=o?t("replyTo",{n:o.n})+" — "+o.text:"";show("rb",!!o)}
 function flash(k){const prev=rpl;$("rbt").textContent=t(k);show("rb",true);setTimeout(()=>{if(prev===rpl)setReply(rpl)},2500)}
@@ -609,7 +653,7 @@ async function sendMsg(text,img,extra){
   if(banUntil>Date.now()){flash("e_banned");return false}
   if(Date.now()-lastSend<1500){const i=$("t");i.placeholder=t("slow");setTimeout(()=>{i.placeholder=t("msgph")},1500);return false}
   lastSend=Date.now();
-  const d={uid:me.id,n:me.name,text:text.slice(0,500),t:Date.now(),s:me.status||"on"};
+  const d={uid:me.id,n:me.name,text:(text||"").slice(0,500),t:Date.now(),s:me.status||"on"};
   if(me.bio)d.b=me.bio.slice(0,100);
   if(me.th)d.a=me.th;else if(me.avatar){const th=await img2url(me.avatar,40,true,.7);if(th)d.a=th}
   if(rpl)d.rp=rpl;
@@ -627,7 +671,18 @@ $("f").onsubmit=async e=>{e.preventDefault();const i=$("t"),v=i.value.trim();if(
 $("ab").onclick=()=>{show("ep",false);show("ap",$("ap").classList.contains("hidden"))};
 $("eb").onclick=()=>{show("ap",false);show("ep",$("ep").classList.contains("hidden"))};
 $("apI").onclick=()=>{show("ap",false);$("pf").click()};
-$("pf").onchange=()=>{const f=$("pf").files[0];$("pf").value="";if(!f)return;const r=new FileReader();r.onload=async()=>{const u=await img2url(r.result,480,false,.6);if(u)sendMsg("",u)};r.readAsDataURL(f)};
+$("pf").onchange=async()=>{
+  const f=$("pf").files[0];$("pf").value="";if(!f)return;
+  const r=new FileReader();
+  r.onload=async()=>{
+    const compressed=await img2url(r.result,1200,false,.75);
+    if(!compressed)return;
+    const url=await uploadImage(compressed,"chat/"+scope().replace(/[^\w\-]/g,"_"));
+    if(url)sendMsg("",url);
+    else flash("e_gen");
+  };
+  r.readAsDataURL(f);
+};
 $("apL").onclick=()=>{show("ap",false);
   if(!navigator.geolocation)return flash("e_loc");
   navigator.geolocation.getCurrentPosition(p=>sendMsg("📍 https://www.google.com/maps?q="+p.coords.latitude.toFixed(5)+","+p.coords.longitude.toFixed(5),null),()=>flash("e_loc"),{timeout:10000})};
@@ -647,7 +702,18 @@ $("rcx").onclick=()=>{keep=false;if(mr)mr.stop()};
 "😀 😂 😍 😎 🥳 😢 😡 👍 👎 🙏 👏 🔥 ❤️ 💔 🎉 ✨ 😴 🤔 😅 😉 🙌 💪 👋 🌹".split(" ").forEach(e=>{const b=document.createElement("button");b.type="button";b.textContent=e;b.onclick=()=>{$("t").value+=e;$("t").focus()};$("ep").appendChild(b)});
 const sep=document.createElement("div");sep.style.cssText="width:100%;height:1px;background:#dde1ea;margin:4px 0";$("ep").appendChild(sep);
 "🐱 🐶 🦄 🐼 🍕 🎂 🚀 🏆 💯 🤝".split(" ").forEach(e=>{const b=document.createElement("button");b.type="button";b.textContent=e;b.style.fontSize="34px";b.onclick=()=>{show("ep",false);sendMsg("",null,{sk:e})};$("ep").appendChild(b)});
-function beep(){if(ls("chat_snd",true)===false)return;try{const c=new (window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=880;g.gain.value=.08;o.start();o.stop(c.currentTime+.15)}catch(e){}}
+
+function beep(){
+  if(ls("chat_snd",true)===false)return;
+  try{
+    if(!_actx)_actx=new (window.AudioContext||window.webkitAudioContext)();
+    if(_actx.state==="suspended")_actx.resume();
+    const o=_actx.createOscillator(),g=_actx.createGain();
+    o.connect(g);g.connect(_actx.destination);
+    o.frequency.value=880;g.gain.value=.08;
+    o.start();o.stop(_actx.currentTime+.15);
+  }catch(e){}
+}
 function applyTheme(){document.body.classList.toggle("dark",ls("chat_dark",false)===true);document.documentElement.style.setProperty("--mc",ls("chat_color","#2f6df6"))}
 
 /* القائمة */
@@ -675,7 +741,16 @@ function profileM(){
     let tmp=me.avatar;const box=document.createElement("div");box.style.textAlign="center";
     const a=document.createElement("div");a.className="av";a.style.cssText="width:90px;height:90px;font-size:36px;margin:0 auto 10px";av(a,{name:me.name,avatar:tmp});
     const f=document.createElement("input");f.type="file";f.accept="image/*";f.className="hidden";
-    f.onchange=()=>{const fl=f.files[0];if(!fl)return;const r=new FileReader();r.onload=async()=>{tmp=await img2url(r.result,128,true,.8);av(a,{name:me.name,avatar:tmp})};r.readAsDataURL(fl)};
+    f.onchange=()=>{const fl=f.files[0];if(!fl)return;const r=new FileReader();
+      r.onload=async()=>{
+        const small=await img2url(r.result,128,true,.8);
+        if(!me.guest){
+          const orig=await img2url(r.result,512,true,.85);
+          const url=await uploadImage(orig,"avatars/"+me.id);
+          tmp=url||small;
+        } else { tmp=small; }
+        av(a,{name:me.name,avatar:tmp});
+      };r.readAsDataURL(fl)};
     const ph=btn(t("photo"),"ghost",()=>f.click());
     const nm=document.createElement("input");nm.className="f";nm.value=me.name;nm.placeholder=t("nameL");
     const bi=document.createElement("input");bi.className="f";bi.maxLength=100;bi.value=me.bio||"";bi.placeholder=t("bio");
@@ -712,7 +787,7 @@ function inboxM(){const list=inbox.slice().sort((x,y)=>y.t-x.t);
   openM(t("dms"),b=>{
     if(!list.length){const e=document.createElement("div");e.className="sm";e.textContent=t("none");b.appendChild(e)}
     list.forEach(x=>{const un=x.from!==me.id&&x.t>ls("dmread_"+me.id+"_"+x.id,0);
-      b.appendChild(rowEl({name:x.name,avatar:x.a||""},(un?"🔵 ":"")+x.name,x.last,()=>{closeM();openChat({kind:"dm",chat:chatId(me.id,x.id),other:x.id,name:x.name,a:x.a||""})}))})})}
+      b.appendChild(rowEl({name:x.name,avatar:x.a||""},(un?"🔵 ":"")+x.name,x.last,()=>{closeM();openChat({kind:"dm",chat:chatId(me.id,x.id),other:x.id,name:x.name,a:x.a||""});updDot()}))})})}
 function onlineM(){const list=onlineNow();
   openM(t("online")+" ("+list.length+")",b=>{
     if(!list.length){const e=document.createElement("div");e.className="sm";e.textContent=t("noOne");b.appendChild(e)}
@@ -727,15 +802,32 @@ function emailM(){openM(t("changeEm"),b=>{
   b.append(i,n,btn(t("save"),"primary",()=>{const v=i.value.trim().toLowerCase();if(v.indexOf("@")<1){n.textContent=t("e_mail");return}
     verifyBeforeUpdateEmail(auth.currentUser,v).then(()=>{n.textContent=t("emSent")}).catch(x=>{n.textContent=t((x.code||"").includes("recent")?"e_recent":"e_gen")})}))})}
 function delM(){openM(t("delAcc"),b=>{
-  const p=document.createElement("p");p.textContent=t("delAsk");p.style.lineHeight="1.6";const n=document.createElement("div");n.className="sm";n.style.margin="8px 0";
+  const p=document.createElement("p");p.textContent=t("delAsk");p.style.lineHeight=1.6;
+  const n=document.createElement("div");n.className="sm";n.style.margin="8px 0";
   b.append(p,n,btn(t("delOk"),"ghost dng",async()=>{
+    n.textContent="…";
     try{
-      for(const path of ["messages","rooms/games/msgs","rooms/study/msgs","rooms/music/msgs"]){
-        const s=await getDocs(query(collection(db,path),where("uid","==",me.id)));await Promise.all(s.docs.map(d=>deleteDoc(d.ref)))}
+      const paths=["messages","rooms/games/msgs","rooms/study/msgs","rooms/music/msgs"];
+      for(const path of paths){
+        const s=await getDocs(query(collection(db,path),where("uid","==",me.id)));
+        await Promise.all(s.docs.map(d=>deleteDoc(d.ref)));
+      }
+      try{
+        const inboxSnap=await getDocs(collection(db,"inbox"));
+        for(const doc0 of inboxSnap.docs){
+          const other=doc0.id;if(other===me.id)continue;
+          const cSnap=await getDocs(collection(db,"inbox",other,"chats"));
+          for(const c of cSnap.docs){ if(c.id===me.id)await deleteDoc(c.ref); }
+        }
+      }catch(e){}
       await deleteDoc(doc(db,"presence",me.id)).catch(()=>{});
-      if(!me.guest)await deleteDoc(doc(db,"users",me.id));
+      await deleteDoc(doc(db,"bans",me.id)).catch(()=>{});
+      if(!me.guest)await deleteDoc(doc(db,"users",me.id)).catch(()=>{});
       await deleteUser(auth.currentUser);
-    }catch(x){n.textContent=t((x.code||"").includes("recent")?"e_recent":"e_gen")}}))})}
+    }catch(x){
+      n.textContent=t((x.code||"").includes("recent")?"e_recent":"e_gen");
+    }
+  }))})}
 function settingsM(){
   openM(t("settings"),b=>{
     const row=(lab,ctrl)=>{const r=document.createElement("div");r.className="row";const l=document.createElement("span");l.textContent=lab;r.append(l,ctrl);b.appendChild(r)};
@@ -812,9 +904,15 @@ async function gpM(){
 /* البداية */
 applyTheme();fillLang($("lg"));fillLang($("lg2"));applyLang();
 $("fT").onclick=()=>textM("terms","terms_b");$("fP").onclick=()=>textM("privacy","privacy_b");$("fC").onclick=contactM;
-try{const mf={name:"Kalimix",short_name:"Kalimix",start_url:location.href.split("#")[0],display:"standalone",background_color:"#2a1a5e",theme_color:"#2a1a5e",
-  icons:[{src:"data:image/svg+xml;utf8,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="110" fill="#2a1a5e"/><text x="256" y="350" font-size="300" text-anchor="middle" fill="#fff" font-family="Arial" font-weight="700">K</text></svg>'),sizes:"any",type:"image/svg+xml"}]};
-  const l=document.createElement("link");l.rel="manifest";l.href="data:application/manifest+json,"+encodeURIComponent(JSON.stringify(mf));document.head.appendChild(l)}catch(e){}
+
+/* PWA: manifest + service worker */
+try{
+  const l=document.createElement("link");l.rel="manifest";l.href="./manifest.json";document.head.appendChild(l);
+  const ic=document.createElement("link");ic.rel="apple-touch-icon";ic.href="./icon-192.png";document.head.appendChild(ic);
+  if("serviceWorker" in navigator){
+    window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+  }
+}catch(e){}
 </script>
 </body>
 </html>
